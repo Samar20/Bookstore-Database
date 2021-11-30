@@ -148,7 +148,7 @@ create table publishes
         foreign key (ISBN) references book
             on delete cascade,
         foreign key (publisher_id) references publisher
-            on delete cascade,
+            on delete cascade
     )
 
 create table handles
