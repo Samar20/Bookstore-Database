@@ -92,7 +92,7 @@ create table owner
         primary key (owner_ID)
     )
 
-    create table owner_addresses
+create table owner_addresses
     (
         address_id			varchar(1),
         owner_ID			varchar(5),
@@ -104,4 +104,17 @@ create table owner
         country             varchar(50) not null,
         primary key (address_id, owner_ID, street_number, street_name) 
 
+    )
+
+create table order_ISBN
+    (
+        order_id            varchar(15) not null,
+        user_ID             varchar(15) not null,
+        ISBN                varchar(13),
+        primary key (order_id, user_ID, ISBN),
+        foreign key (user_id) references user
+            on delete cascade,
+        foreign key (order_id) references order
+            on delete cascade,
+        foreign key (ISBN) references book
     )
