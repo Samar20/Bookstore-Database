@@ -81,3 +81,83 @@ create table buys
         foreign key (order_id) references order
 
     )
+
+create table owner
+    (
+        owner_ID			varchar(5), 
+        owner_name			varchar(20) not null, 
+        owner_email			varchar(40) not null,
+        owner_phonenumber	varchar(15),
+        owner_password		varchar(20) not null,
+
+        primary key (owner_ID)
+    )
+
+create table owner_addresses
+    (
+        address_id			  varchar(1),
+        owner_ID			  varchar(5),
+        street_number         varchar(35) not null, 
+        street_name           varchar(35) not null, 
+        city                  varchar(35) not null, 
+        prov                  varchar(2) not null, 
+        postal_code           varchar(7) not null, 
+        country               varchar(50) not null,
+
+        primary key (address_id, owner_ID, street_number, street_name) 
+
+    )
+
+create table order_ISBN
+    (
+        order_id               varchar(15) not null,
+        user_ID                varchar(15) not null,
+        ISBN                   varchar(13),
+
+        primary key (order_id, user_ID, ISBN),
+        foreign key (user_id) references user
+            on delete cascade,
+        foreign key (order_id) references order
+            on delete cascade,
+        foreign key (ISBN) references book
+    )
+
+create table publisher
+    (
+        publisher_id          varchar(5) not null,
+        publisher_name        varchar(50) not null,
+        publisher_email       varchar(40) not null,
+        street_number         varchar(35) not null, 
+        street_name           varchar(35) not null, 
+        city                  varchar(35) not null, 
+        prov                  varchar(35) not null, 
+        postal_code           varchar(7) not null, 
+        country               varchar(50) not null, 
+        publisher_phone       varchar(15) not null, 
+        publisher_bankAccount varchar(30) not null, 
+
+        primary key (publisher_id)
+    )
+
+create table publishes
+    (
+        publisher_id            varchar(5),
+        ISBN                    varchar(13),
+
+        primary key (ISBN),
+        foreign key (ISBN) references book
+            on delete cascade,
+        foreign key (publisher_id) references publisher
+            on delete cascade,
+    )
+
+create table handles
+    (
+        order_id                varchar(15),
+        owner_ID                varchar(5),
+
+        primary key (order_id), 
+        foreign key order_id references order   
+            on delete cascade,
+        foreign key owner_ID references owner
+    )
