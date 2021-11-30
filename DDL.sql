@@ -81,3 +81,27 @@ create table buys
         foreign key (order_id) references order
 
     )
+
+create table owner
+    (
+        owner_ID			varchar(5), 
+        owner_name			varchar(20) not null, 
+        owner_email			varchar(40) not null,
+        owner_phonenumber	varchar(15),
+        owner_password		varchar(20) not null,
+        primary key (owner_ID)
+    )
+
+    create table owner_addresses
+    (
+        address_id			varchar(1),
+        owner_ID			varchar(5),
+        street_number       varchar(35) not null, 
+        street_name         varchar(35) not null, 
+        city                varchar(35) not null, 
+        prov                varchar(2) not null, 
+        postal_code         varchar(7) not null, 
+        country             varchar(50) not null,
+        primary key (address_id, owner_ID, street_number, street_name) 
+
+    )
