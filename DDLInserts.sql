@@ -42,3 +42,8 @@ insert into book values ('989-28-79-40897-8', 'Portmeirion', 'Bianca', 'Thompson
 insert into book values ('989-28-3705-633-3', "It's Never Just a Glass", 'Leonard', 'Nabokov', 'Young Adult', '222', '1', '19.99', '30', 'CHP', '3.5', 'Hardcover')
 insert into book values ('989-28-79-14379-4', 'Quiddity and Quoddity', 'Jill', 'Hergesheimer', 'Young Adult', '373', '2', '11.99', '42', 'ESP', '2.0', 'Trade paperback')
 insert into book values ('989-28-79-03683-6', 'The Spark and The Ashe', 'Ursula', 'Karénine', 'Young Adult', '340', '4', '18.50', '35', 'ESP', '4.5', 'Hardcover')
+
+insert into publisher values ('CHP', 'Cedar House Publishers', 'contact@cedarhousepub.com', '407', 'Eastview Drive', 'Friday Harbor', 'Washington', '24572', 'USA', '434-929-8002', 0321000021)
+insert into publisher values ('SSC', 'Sound & Seas Co.,', 'contact@sound&seas.com', '123', 'Publisher Ave', 'Ottawa', 'Ontario', 'K19J7X', 'Canada', '613-123-5431', 2092944675)
+insert into publisher values ('PP', 'Palimpsest Printing', 'contact@palimpsetprint.com', '432', 'welovesql street', 'Fremont', 'California', '93244', 'USA', '669-432-4325', 9432843295)
+insert into publisher values ('ESP', 'Etaoin Shrdlu Press', 'contact@etaoinshrdlu.com', '321', 'book street', 'Toronto', 'Ontario', 'M3C0C3', 'Canada', '416-234-7645', 6543644098)
