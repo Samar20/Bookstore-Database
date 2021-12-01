@@ -128,7 +128,7 @@ create table publisher
         postal_code           varchar(7) not null, 
         country               varchar(50) not null, 
         publisher_phone       varchar(15) not null, 
-        publisher_bankAccount varchar(30) not null, 
+        publisher_bankAccount numeric(10,0) not null, 
 
         primary key (publisher_id)
     )
