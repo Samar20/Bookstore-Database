@@ -30,9 +30,8 @@ create table user_addresses
     )
 
 
-
 create table book 
-	(ISBN       varchar(13), 
+	(ISBN       varchar(18), 
 	 name	    varchar(50) not null, 
 	 author_firstname       varchar(20) not null,
      author_lasrname        varchar(20) ,
@@ -43,7 +42,7 @@ create table book
      stock       numeric(5,2),
      publisher_id       varchar(5) not null,
      publisher_percent       numeric(4,2),
-     bank_acc       varchar(10),
+     format       varchar(30),
 	 primary key (ISBN),
 	 foreign key (publisher_id) references publisher
 		on delete cascade,
@@ -115,7 +114,7 @@ create table order_ISBN
     (
         order_id               varchar(15) not null,
         user_ID                varchar(15) not null,
-        ISBN                   varchar(13),
+        ISBN                   varchar(18),
 
         primary key (order_id, user_ID, ISBN),
         foreign key (user_id) references user
@@ -145,7 +144,7 @@ create table publisher
 create table publishes
     (
         publisher_id            varchar(5),
-        ISBN                    varchar(13),
+        ISBN                    varchar(18),
 
         primary key (ISBN),
         foreign key (ISBN) references book
