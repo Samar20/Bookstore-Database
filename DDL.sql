@@ -5,6 +5,13 @@ create table user
         user_email			varchar(40) not null,
         user_phonenumber			varchar(15),
         user_password			varchar(20) not null,
+        street_number       varchar(35) not null, 
+        street_name       varchar(35) not null, 
+        city       varchar(35) not null, 
+        prov       varchar(2) not null, 
+        postal_code       varchar(7) not null, 
+        country       varchar(50) not null, 
+        member_years       numeric(2,0),
         primary key (user_ID)
     )
 
@@ -46,19 +53,14 @@ create table order
     (
         order_id       varchar(15) not null,
         user_ID       varchar(15) not null, 
-        street_number       varchar(35) not null, 
-        street_name       varchar(35) not null, 
-        city       varchar(35) not null, 
-        prov       varchar(2) not null, 
-        postal_code       varchar(7) not null, 
-        country       varchar(50) not null, 
         total_price       numeric(4,2) check (total_price > 0), 
         no_of_items       numeric(5,2) check (no_of_items > 0),
+        status_order       varchar(50),
         primary key (order_id)
     )
 
 *ask prof 
-create table inorder
+create table inOrder
     (
         order_id       varchar(15) not null,
         ISBN       varchar(13), 
@@ -73,12 +75,13 @@ create table inorder
 
 create table buys
     (
-        user_ID       varchar(15) not null,
         order_id       varchar(15) not null,
-        primary key (user_ID),
-        foreign key (user_ID) references user
-            on delete cascade,
+        user_ID       varchar(15) not null,
+        primary key (order_ID),
         foreign key (order_id) references order
+            on delete cascade,
+        foreign key (user_ID) references user
+            on delete cascade
 
     )
 
