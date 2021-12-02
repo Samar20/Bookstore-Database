@@ -84,7 +84,7 @@ insert into publishes values ('989-28-3705-633-3', 'CHP')
 insert into publishes values ('989-28-79-14379-4', 'ESP')
 insert into publishes values ('989-28-79-03683-6', 'ESP')
 
-insert into handles values ()
+-- waiting for ORDER to complete Handles 
 
 
 
