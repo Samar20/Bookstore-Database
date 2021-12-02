@@ -52,10 +52,12 @@ create table order
     (
         order_id       varchar(15) not null,
         user_ID       varchar(15) not null, 
+        order_date       DATE,
         total_price       numeric(4,2) check (total_price > 0), 
         no_of_items       numeric(5,2) check (no_of_items > 0),
         status_order       varchar(50),
-        primary key (order_id)
+        primary key (order_id),
+        foreign key (user_ID) references user
     )
 
 *ask prof 
@@ -63,7 +65,7 @@ create table inOrder
     (
         order_id       varchar(15) not null,
         ISBN       varchar(13), 
-        primary key (order_id),
+        primary key (order_id, ISBN),
         foreign key (order_id) references order
             on delete cascade,
         foreign key(ISBN) references book
