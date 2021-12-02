@@ -47,3 +47,44 @@ insert into publisher values ('CHP', 'Cedar House Publishers', 'contact@cedarhou
 insert into publisher values ('SSC', 'Sound & Seas Co.,', 'contact@sound&seas.com', '123', 'Publisher Ave', 'Ottawa', 'Ontario', 'K19J7X', 'Canada', '613-123-5431', 2092944675)
 insert into publisher values ('PP', 'Palimpsest Printing', 'contact@palimpsetprint.com', '432', 'welovesql street', 'Fremont', 'California', '93244', 'USA', '669-432-4325', 9432843295)
 insert into publisher values ('ESP', 'Etaoin Shrdlu Press', 'contact@etaoinshrdlu.com', '321', 'book street', 'Toronto', 'Ontario', 'M3C0C3', 'Canada', '416-234-7645', 6543644098)
+
+insert into owner values ('00000', 'LookInnaAdmin', 'admin@lookinna.com', '123-456-7890', 'password', '222', 'Bookstore Street', 'Ottawa', 'Ontario', 'K3T0V8', 'Canada', 50000.00)
+
+insert into user values ('10000', 'Indumini', 'indumini@me.com', '123-543-2345', 'password123', '123', 'Sesame Street', 'Ottawa', 'Ontario', 'K2H8A7', 'Canada', 5)
+insert into user values ('10001', 'Samar', 'samar@me.com', '098-765-2343', 'password1234', '321', 'Sesame Street', 'Ottawa', 'Ontario', 'K2H8A8', 'Canada', 5)
+insert into user values ('10002', 'John', 'john@gmail.com', '643-234-9088', 'john123', '33', 'King Street', 'Toronto', 'Ontario', 'M4T2T1', 'Canada', 1)
+insert into user values ('10003', 'Samantha', 'samantha12@hotmail.com', '999-888-7777', 'samAntha12', '98', 'Jason Drive', 'Hamilton', 'Ontario', 'L0J9G7', 'Canada', 1)
+insert into user values ('10004', 'Jackson', 'jackson323@gmail.com', '111-222-3333', 'jjokasd123s', '9128', 'Queen Street', 'Ottawa', 'Ontario', 'K1Y9F7', 'Canada', 4)
+insert into user values ('10005', 'Jessica', 'jessjess@hotmail.com', '321-123-0000', 'jess1ca11', '777', 'Lucky Drive', 'Mississauga', 'Ontario', 'M4T7D6', 'Canada', 3)
+
+
+insert into publishes values ('989-28-3705-987-7', 'CHP')
+insert into publishes values ('989-28-3705-592-3', 'CHP')
+insert into publishes values ('989-28-3705-583-1', 'CHP')
+insert into publishes values ('989-28-3705-966-2', 'CHP')
+insert into publishes values ('989-28-79-27078-0', 'ESP')
+insert into publishes values ('989-28-79-30536-9', 'ESP')
+insert into publishes values ('989-28-79-52883-6', 'ESP')
+insert into publishes values ('989-28-654-2017-5', 'PP')
+insert into publishes values ('989-28-654-7965-4', 'PP')
+insert into publishes values ('989-28-654-3899-6', 'PP')
+insert into publishes values ('989-28-79-82749-6', 'ESP')
+insert into publishes values ('989-28-79-82125-8', 'ESP')
+insert into publishes values ('989-28-79-22562-9', 'ESP')
+insert into publishes values ('989-28-654-2620-7', 'PP')
+insert into publishes values ('989-28-654-6507-7', 'PP')
+insert into publishes values ('989-28-654-8573-0', 'PP')
+insert into publishes values ('989-28-229-0197-6', 'SSC')
+insert into publishes values ('989-28-229-1404-4', 'SSC')
+insert into publishes values ('989-28-229-6632-6', 'SSC')
+insert into publishes values ('989-28-79-69359-6', 'ESP')
+insert into publishes values ('989-28-79-44730-', 'ESP') 
+insert into publishes values ('989-28-79-40897-8', 'ESP')
+insert into publishes values ('989-28-3705-633-3', 'CHP')
+insert into publishes values ('989-28-79-14379-4', 'ESP')
+insert into publishes values ('989-28-79-03683-6', 'ESP')
+
+insert into handles values ()
+
+
+
