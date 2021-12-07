@@ -17,21 +17,22 @@ create table users
 
 
 create table book 
-	(ISBN       varchar(18), 
-	 name	    varchar(50) not null, 
-	 author_firstname       varchar(20) not null,
-     author_lasrname        varchar(20) ,
-	 genre       varchar(15) check (genre in ('Childrens', 'Fiction', 'Memoir', 'Mystery', 'Nonfiction', 'Romance', 'SciFi/Fantasy', 'Young Adult')),
-     num_pages       numeric(5,0) check(num_pages > 1),
-     rating       numeric(1,0) check (rating > -1 and rating < 6),
-     price       numeric(4,2) check (price >= 0),
-     stock       numeric(5,2),
-     publisher_id       varchar(5) not null,
-     publisher_percent       numeric(4,2),
-     format       varchar(30),
-	 primary key (ISBN),
-	 foreign key (publisher_id) references publisher
-		on delete cascade,
+	(
+        ISBN       varchar(18), 
+	    name	    varchar(50) not null, 
+	    author_firstname       varchar(20) not null,
+        author_lasrname        varchar(20) ,
+	    genre       varchar(15) check (genre in ('Childrens', 'Fiction', 'Memoir', 'Mystery', 'Nonfiction', 'Romance', 'SciFi/Fantasy', 'Young Adult')),
+        num_pages       numeric(5,0) check(num_pages > 1),
+        rating       numeric(1,0) check (rating > -1 and rating < 6),
+        price       numeric(4,2) check (price >= 0),
+        stock       numeric(5,2),
+        publisher_id       varchar(5) not null,
+        publisher_percent       numeric(4,2),
+        format       varchar(30),
+	    primary key (ISBN),
+	    foreign key (publisher_id) references publisher
+		    on delete cascade,
 	);
 
 create table order
