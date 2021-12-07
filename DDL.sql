@@ -13,7 +13,7 @@ create table users
         country       varchar(50) not null, 
         member_years       numeric(2,0),
         primary key (user_ID)
-    )
+    );
 
 
 create table book 
@@ -44,7 +44,7 @@ create table order
         status_order       varchar(50),
         primary key (order_id),
         foreign key (user_ID) references user
-    )
+    );
 
 *ask prof 
 create table inOrder
@@ -58,7 +58,7 @@ create table inOrder
 
 
 
-    )
+    );
 
 create table buys
     (
@@ -70,7 +70,7 @@ create table buys
         foreign key (user_ID) references user
             on delete cascade
 
-    )
+    );
 
 create table owners
     (
@@ -88,7 +88,7 @@ create table owners
         salary                numeric(8,2)
 
         primary key (owner_ID)
-    )
+    );
 
 create table order_ISBN
     (
@@ -102,7 +102,7 @@ create table order_ISBN
         foreign key (order_id) references order
             on delete cascade,
         foreign key (ISBN) references book
-    )
+    );
 
 create table publisher
     (
@@ -119,7 +119,7 @@ create table publisher
         publisher_bankAccount numeric(10,0) not null, 
 
         primary key (publisher_id)
-    )
+    );
 
 create table publishes
     (
@@ -131,7 +131,7 @@ create table publishes
             on delete cascade,
         foreign key (publisher_id) references publisher
             on delete cascade
-    )
+    );
 
 create table handles
     (
@@ -142,4 +142,4 @@ create table handles
         foreign key order_id references order   
             on delete cascade,
         foreign key owner_ID references owner
-    )
+    );
