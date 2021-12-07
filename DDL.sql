@@ -1,4 +1,4 @@
-create table user
+create table users
     (
         user_ID			varchar(5), 
         user_name			varchar(20) not null, 
@@ -13,20 +13,6 @@ create table user
         country       varchar(50) not null, 
         member_years       numeric(2,0),
         primary key (user_ID)
-    )
-
-create table user_addresses
-    (
-        address_id			varchar(1),
-        user_ID			varchar(5),
-        street_number       varchar(35) not null, 
-        street_name       varchar(35) not null, 
-        city       varchar(35) not null, 
-        prov       varchar(2) not null, 
-        postal_code       varchar(7) not null, 
-        country       varchar(50) not null,
-        primary key (address_id, user_ID, street_number, street_name) 
-
     )
 
 
@@ -86,7 +72,7 @@ create table buys
 
     )
 
-create table owner
+create table owners
     (
         owner_ID			  varchar(5), 
         owner_name			  varchar(20) not null, 
