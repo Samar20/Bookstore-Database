@@ -146,3 +146,22 @@ create table handles
             on delete cascade,
         foreign key (owner_ID) references owners
     );
+
+create table addresses
+    (
+        order_id                varchar(15),
+        address_id              varchar(5),
+        street_number           varchar(35) not null, 
+        street_name             varchar(35) not null, 
+        city                    varchar(35) not null, 
+        prov                    varchar(35) not null, 
+        postal_code             varchar(7) not null, 
+        country                 varchar(50) not null, 
+
+        primary key (order_id)
+    );
+
+-- create table order_address
+--     (
+        
+--     );
