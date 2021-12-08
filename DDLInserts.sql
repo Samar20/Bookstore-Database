@@ -173,9 +173,32 @@ insert into publishes values ('989-28-79-03683-6', 'ESP');
 insert into owners values ('00000', 'LookInnaAdmin', 'admin@lookinna.com', '123-456-7890', 'password', '222', 'Bookstore Street', 'Ottawa', 'ON', 'K3T0V8', 'Canada', 50000.00);
 
 
-
-
-
+insert into handles values ('107020-1','00000')
+insert into handles values ('107020-10','00000')
+insert into handles values ('107020-11','00000')
+insert into handles values ('107020-12','00000')
+insert into handles values ('107020-13','00000')
+insert into handles values ('107020-14','00000')
+insert into handles values ('107020-15','00000')
+insert into handles values ('107020-16','00000')
+insert into handles values ('107020-17','00000')
+insert into handles values ('107020-18','00000')
+insert into handles values ('107050-2232','00000')
+insert into handles values ('107050-2233','00000')
+insert into handles values ('107050-2234','00000')
+insert into handles values ('107050-2235','00000')
+insert into handles values ('107050-2236','00000')
+insert into handles values ('107050-2237','00000')
+insert into handles values ('107050-2238','00000')
+insert into handles values ('107050-2239','00000')
+insert into handles values ('107050-2240','00000')
+insert into handles values ('107050-2241','00000')
+insert into handles values ('107078-4183','00000')
+insert into handles values ('107078-4184','00000')
+insert into handles values ('107078-4185','00000')
+insert into handles values ('107078-4186','00000')
+insert into handles values ('107078-4187','00000')
+insert into handles values ('107078-4188','00000')
 
 -- waiting for ORDER to complete Handles 
 
