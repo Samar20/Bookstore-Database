@@ -9,12 +9,14 @@ delete from book;
 delete from publisher;
 delete from users;
 
-insert into users values ('10000', 'Indumini', 'indumini@me.com', '123-543-2345', 'password123', '123', 'Sesame Street', 'Ottawa', 'ON', 'K2H8A7', 'Canada', 5);
-insert into users values ('10001', 'Samar', 'samar@me.com', '098-765-2343', 'password1234', '321', 'Sesame Street', 'Ottawa', 'ON', 'K2H8A8', 'Canada', 5);
-insert into users values ('10002', 'John', 'john@gmail.com', '643-234-9088', 'john123', '33', 'King Street', 'Toronto', 'ON', 'M4T2T1', 'Canada', 1);
-insert into users values ('10003', 'Samantha', 'samantha12@hotmail.com', '999-888-7777', 'samAntha12', '98', 'Jason Drive', 'Hamilton', 'ON', 'L0J9G7', 'Canada', 1);
-insert into users values ('10004', 'Jackson', 'jackson323@gmail.com', '111-222-3333', 'jjokasd123s', '9128', 'Queen Street', 'Ottawa', 'ON', 'K1Y9F7', 'Canada', 4);
-insert into users values ('10005', 'Jessica', 'jessjess@hotmail.com', '321-123-0000', 'jess1ca11', '777', 'Lucky Drive', 'Mississauga', 'ON', 'M4T7D6', 'Canada', 3);
+
+insert into users values (DEFAULT, 'Indumini', 'indumini@me.com', '123-543-2345', 'password123', '123', 'Sesame Street', 'Ottawa', 'ON', 'K2H8A7', 'Canada', 5);
+insert into users values (DEFAULT, 'Samar', 'samar@me.com', '098-765-2343', 'password1234', '321', 'Sesame Street', 'Ottawa', 'ON', 'K2H8A8', 'Canada', 5);
+insert into users values (DEFAULT, 'John', 'john@gmail.com', '643-234-9088', 'john123', '33', 'King Street', 'Toronto', 'ON', 'M4T2T1', 'Canada', 1);
+insert into users values (DEFAULT, 'Samantha', 'samantha12@hotmail.com', '999-888-7777', 'samAntha12', '98', 'Jason Drive', 'Hamilton', 'ON', 'L0J9G7', 'Canada', 1);
+insert into users values (DEFAULT, 'Jackson', 'jackson323@gmail.com', '111-222-3333', 'jjokasd123s', '9128', 'Queen Street', 'Ottawa', 'ON', 'K1Y9F7', 'Canada', 4);
+insert into users values (DEFAULT, 'Jessica', 'jessjess@hotmail.com', '321-123-0000', 'jess1ca11', '777', 'Lucky Drive', 'Mississauga', 'ON', 'M4T7D6', 'Canada', 3);
+
 
 insert into publisher values ('CHP', 'Cedar House Publishers', 'contact@cedarhousepub.com', '407', 'Eastview Drive', 'Friday Harbor', 'Washington', '24572', 'USA', '434-929-8002', 0321000021);
 insert into publisher values ('SSC', 'Sound & Seas Co.,', 'contact@sound&seas.com', '123', 'Publisher Ave', 'Ottawa', 'Ontario', 'K19J7X', 'Canada', '613-123-5431', 2092944675);
@@ -201,34 +203,31 @@ insert into handles values ('107078-4187','00000');
 insert into handles values ('107078-4188','00000');
 
 
-insert into addresses values ('107020-1','10000','123','Sesame St','Ottawa','Ontario','K1T5F3','Canada');
-insert into addresses values ('107020-10','10001','231','Owl Lane','Kingston','Ontario','K1T5FS3','Canada');
-insert into addresses values ('107020-11','10002','12','Joke St','Hamilton','Ontario','K125F3','Canada');
-insert into addresses values ('107020-12','10003','3','DMS Ave','Toronto','Ontario','K4T5F3','Canada');
-insert into addresses values ('107020-13','10004','65','Comp Dr','Los Angeles','California','97263','USA');
-insert into addresses values ('107020-14','10005','346','Art St','New York','New York','78990','USA');
-insert into addresses values ('107020-15','10006','654','Arch St',' Chicago','Illinois','67893','USA');
-insert into addresses values ('107020-16','10007','876','Carleton Dr','Vancouver','British Columbia','K2HJ3J','Canada');
-insert into addresses values ('107020-17','10008','6543','OttawaU St','Stratford','Ontario','K2B8D7','Canada');
-insert into addresses values ('107020-18','10009','765', 'King St','Ajax','Ontario','H8G7F6','Canada');
-insert into addresses values ('107050-2232','10010','54','Queen St','Pickering','Ontario','HD8B87','Canada');
-insert into addresses values ('107050-2233','10011','5','Prince St','Metcalfe','Ontario','J8B78S','Canada');
-insert into addresses values ('107050-2234','10012','876','Princess Way','Greely','Ontario','J3N5H6','Canada');
-insert into addresses values ('107050-2235','10013','976','Elizabeth Dr','Cornwall','Ontario','D3F3G4','Canada');
-insert into addresses values ('107050-2236','10014','204','House Rd','Smith Falls','Ontario','Q1W2E3','Canada');
-insert into addresses values ('107050-2237','10015','1755','Main St','Perth','Ontario','W2E3R4','Canada');
-insert into addresses values ('107050-2238','10016','235','Road St','Winchester','Ontario','E3R4T5','Canada');
-insert into addresses values ('107050-2239','10017','6543','Meghan Way','Kenora','Ontario','R4T5Y6','Canada');
-insert into addresses values ('107050-2240','10018','2365','Bank St','London','Ontario','T5Y6U7','Canada');
-insert into addresses values ('107050-2241','10019','743','Young St','Mississauga','Ontario','Y6U7I8','Canada');
-insert into addresses values ('107078-4183','10020','624','Dawn Crt','Oshawa','Ontario','E3R4Y6','Canada');
-insert into addresses values ('107078-4184','10021','999','Spongebob Way','Ottawa','Ontario','T5I8O9','Canada');
-insert into addresses values ('107078-4185','10022','113','Patrick Pvt','Ottawa','Ontario','W2R4T5','Canada');
-insert into addresses values ('107078-4186','10023','174','Squidward Ave','Montreal','Quebec','O9I8U7','Canada');
-insert into addresses values ('107078-4187','10024','3','Holly Ave','Montreal','Quebec','U7Y6T5','Canada');
-insert into addresses values ('107078-4188','10025','5','Science St','Montreal','Quebec','T5R4R3','Canada');
-
--- waiting for ORDER to complete Handles 
-
+insert into addresses values ('107020-1',DEFAULT,'123','Sesame St','Ottawa','Ontario','K1T5F3','Canada');
+insert into addresses values ('107020-10',DEFAULT,'231','Owl Lane','Kingston','Ontario','K1T5FS3','Canada');
+insert into addresses values ('107020-11',DEFAULT,'12','Joke St','Hamilton','Ontario','K125F3','Canada');
+insert into addresses values ('107020-12',DEFAULT,'3','DMS Ave','Toronto','Ontario','K4T5F3','Canada');
+insert into addresses values ('107020-13',DEFAULT,'65','Comp Dr','Los Angeles','California','97263','USA');
+insert into addresses values ('107020-14',DEFAULT,'346','Art St','New York','New York','78990','USA');
+insert into addresses values ('107020-15',DEFAULT,'654','Arch St',' Chicago','Illinois','67893','USA');
+insert into addresses values ('107020-16',DEFAULT,'876','Carleton Dr','Vancouver','British Columbia','K2HJ3J','Canada');
+insert into addresses values ('107020-17',DEFAULT,'6543','OttawaU St','Stratford','Ontario','K2B8D7','Canada');
+insert into addresses values ('107020-18',DEFAULT,'765', 'King St','Ajax','Ontario','H8G7F6','Canada');
+insert into addresses values ('107050-2232',DEFAULT,'54','Queen St','Pickering','Ontario','HD8B87','Canada');
+insert into addresses values ('107050-2233',DEFAULT,'5','Prince St','Metcalfe','Ontario','J8B78S','Canada');
+insert into addresses values ('107050-2234',DEFAULT,'876','Princess Way','Greely','Ontario','J3N5H6','Canada');
+insert into addresses values ('107050-2235',DEFAULT,'976','Elizabeth Dr','Cornwall','Ontario','D3F3G4','Canada');
+insert into addresses values ('107050-2236',DEFAULT,'204','House Rd','Smith Falls','Ontario','Q1W2E3','Canada');
+insert into addresses values ('107050-2237',DEFAULT,'1755','Main St','Perth','Ontario','W2E3R4','Canada');
+insert into addresses values ('107050-2238',DEFAULT,'235','Road St','Winchester','Ontario','E3R4T5','Canada');
+insert into addresses values ('107050-2239',DEFAULT,'6543','Meghan Way','Kenora','Ontario','R4T5Y6','Canada');
+insert into addresses values ('107050-2240',DEFAULT,'2365','Bank St','London','Ontario','T5Y6U7','Canada');
+insert into addresses values ('107050-2241',DEFAULT,'743','Young St','Mississauga','Ontario','Y6U7I8','Canada');
+insert into addresses values ('107078-4183',DEFAULT,'624','Dawn Crt','Oshawa','Ontario','E3R4Y6','Canada');
+insert into addresses values ('107078-4184',DEFAULT,'999','Spongebob Way','Ottawa','Ontario','T5I8O9','Canada');
+insert into addresses values ('107078-4185',DEFAULT,'113','Patrick Pvt','Ottawa','Ontario','W2R4T5','Canada');
+insert into addresses values ('107078-4186',DEFAULT,'174','Squidward Ave','Montreal','Quebec','O9I8U7','Canada');
+insert into addresses values ('107078-4187',DEFAULT,'3','Holly Ave','Montreal','Quebec','U7Y6T5','Canada');
+insert into addresses values ('107078-4188',DEFAULT,'5','Science St','Montreal','Quebec','T5R4R3','Canada');
 
 

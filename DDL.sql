@@ -1,6 +1,6 @@
 create table users
     (
-        user_ID			varchar(5), 
+        user_ID			SERIAL UNIQUE, 
         user_name			varchar(20) not null, 
         user_email			varchar(40) not null,
         user_phonenumber			varchar(15),
@@ -14,6 +14,8 @@ create table users
         member_years       numeric(2,0),
         primary key (user_ID)
     );
+ALTER SEQUENCE users_user_ID_seq RESTART WITH 10000 INCREMENT BY 1;
+
 
 create table publisher
     (
@@ -31,7 +33,6 @@ create table publisher
 
         primary key (publisher_id)
     );
-
 
 create table book 
 	(
@@ -55,7 +56,7 @@ create table book
 create table orders
     (
         order_id       varchar(15) not null,
-        user_ID       varchar(15) not null, 
+        user_ID        integer, 
         order_date       DATE,
         total_price       numeric(4,2) check (total_price > 0), 
         no_of_items       numeric(5,2) check (no_of_items > 0),
@@ -81,7 +82,7 @@ create table inOrder
 create table buys
     (
         order_id       varchar(15) not null,
-        user_ID       varchar(15) not null,
+        user_ID        integer not null,
         primary key (order_ID),
         foreign key (order_id) references orders
             on delete cascade,
@@ -111,7 +112,7 @@ create table owners
 create table order_ISBN
     (
         order_id               varchar(15) not null,
-        user_ID                varchar(15) not null,
+        user_ID        		integer not null,
         ISBN                   varchar(18),
 
         primary key (order_id, user_ID, ISBN),
@@ -149,8 +150,8 @@ create table handles
 
 create table addresses
     (
-        address_id              varchar(5),
         order_id                varchar(15),
+        address_id              SERIAL UNIQUE,
         street_number           varchar(35) not null, 
         street_name             varchar(35) not null, 
         city                    varchar(35) not null, 
@@ -160,3 +161,4 @@ create table addresses
 
         primary key (address_id)
     );
+    ALTER SEQUENCE addresses_address_id_seq RESTART WITH 9999 INCREMENT BY 1;
