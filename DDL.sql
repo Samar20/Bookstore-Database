@@ -160,8 +160,3 @@ create table addresses
 
         primary key (address_id)
     );
-
--- create table order_address
---     (
-        
---     );
