@@ -46,6 +46,9 @@ from users
 where user_email = 'indumini@me.com' AND user_password = 'password123'
 group by user_id, user_email
 
+-- User - Creating a new account
+-- USER ID SHOULD BE SERIAL
+insert into user (user_ID, user_name, user_email, user_phonenumber, user_password, street_number, street_name, city, prov, postal_code, country, 0)
 
 -- Trigger
 -- Running low on book
