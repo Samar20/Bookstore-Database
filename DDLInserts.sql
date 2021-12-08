@@ -173,32 +173,60 @@ insert into publishes values ('989-28-79-03683-6', 'ESP');
 insert into owners values ('00000', 'LookInnaAdmin', 'admin@lookinna.com', '123-456-7890', 'password', '222', 'Bookstore Street', 'Ottawa', 'ON', 'K3T0V8', 'Canada', 50000.00);
 
 
-insert into handles values ('107020-1','00000')
-insert into handles values ('107020-10','00000')
-insert into handles values ('107020-11','00000')
-insert into handles values ('107020-12','00000')
-insert into handles values ('107020-13','00000')
-insert into handles values ('107020-14','00000')
-insert into handles values ('107020-15','00000')
-insert into handles values ('107020-16','00000')
-insert into handles values ('107020-17','00000')
-insert into handles values ('107020-18','00000')
-insert into handles values ('107050-2232','00000')
-insert into handles values ('107050-2233','00000')
-insert into handles values ('107050-2234','00000')
-insert into handles values ('107050-2235','00000')
-insert into handles values ('107050-2236','00000')
-insert into handles values ('107050-2237','00000')
-insert into handles values ('107050-2238','00000')
-insert into handles values ('107050-2239','00000')
-insert into handles values ('107050-2240','00000')
-insert into handles values ('107050-2241','00000')
-insert into handles values ('107078-4183','00000')
-insert into handles values ('107078-4184','00000')
-insert into handles values ('107078-4185','00000')
-insert into handles values ('107078-4186','00000')
-insert into handles values ('107078-4187','00000')
-insert into handles values ('107078-4188','00000')
+insert into handles values ('107020-1','00000');
+insert into handles values ('107020-10','00000');
+insert into handles values ('107020-11','00000');
+insert into handles values ('107020-12','00000');
+insert into handles values ('107020-13','00000');
+insert into handles values ('107020-14','00000');
+insert into handles values ('107020-15','00000');
+insert into handles values ('107020-16','00000');
+insert into handles values ('107020-17','00000');
+insert into handles values ('107020-18','00000');
+insert into handles values ('107050-2232','00000');
+insert into handles values ('107050-2233','00000');
+insert into handles values ('107050-2234','00000');
+insert into handles values ('107050-2235','00000');
+insert into handles values ('107050-2236','00000');
+insert into handles values ('107050-2237','00000');
+insert into handles values ('107050-2238','00000');
+insert into handles values ('107050-2239','00000');
+insert into handles values ('107050-2240','00000');
+insert into handles values ('107050-2241','00000');
+insert into handles values ('107078-4183','00000');
+insert into handles values ('107078-4184','00000');
+insert into handles values ('107078-4185','00000');
+insert into handles values ('107078-4186','00000');
+insert into handles values ('107078-4187','00000');
+insert into handles values ('107078-4188','00000');
+
+
+insert into addresses values ('107020-1','10000','123','Sesame St','Ottawa','Ontario','K1T5F3','Canada');
+insert into addresses values ('107020-10','10001','231'.'Owl Lane'.'Kingston','Ontario','K1T5FS3','Canada');
+insert into addresses values ('107020-11','10002','12','Joke St','Hamilton','Ontario','K125F3','Canada');
+insert into addresses values ('107020-12','10003','3'.'DMS Ave','Toronto','Ontario','K4T5F3','Canada');
+insert into addresses values ('107020-13','10004','65','Comp Dr','Los Angeles','California','97263','USA');
+insert into addresses values ('107020-14','10005','346','Art St','New York','New York','78990','USA');
+insert into addresses values ('107020-15','10006','654','Arch St',' Chicago','Illinois','67893','USA');
+insert into addresses values ('107020-16','10007','876','Carleton Dr','Vancouver','British Columbia','K2HJ3J','Canada');
+insert into addresses values ('107020-17','10008','6543','OttawaU St','Stratford','Ontario','K2B8D7','Canada');
+insert into addresses values ('107020-18','10009','765', 'King St','Ajax','Ontario','H8G7F6','Canada');
+insert into addresses values ('107050-2232','10010','54','Queen St','Pickering','Ontario','HD8B87','Canada');
+insert into addresses values ('107050-2233','10011','5','Prince St','Metcalfe','Ontario','J8B78S','Canada');
+insert into addresses values ('107050-2234','10012','876','Princess Way','Greely','Ontario','J3N5H6','Canada');
+insert into addresses values ('107050-2235','10013','976','Elizabeth Dr','Cornwall','Ontario','D3F3G4','Canada');
+insert into addresses values ('107050-2236','10014','204','House Rd','Smith Falls','Ontario','Q1W2E3','Canada');
+insert into addresses values ('107050-2237','10015','1755','Main St','Perth','Ontario','W2E3R4','Canada');
+insert into addresses values ('107050-2238','10016','235','Road St','Winchester','Ontario','E3R4T5','Canada');
+insert into addresses values ('107050-2239','10017','6543','Meghan Way','Kenora','Ontario','R4T5Y6','Canada');
+insert into addresses values ('107050-2240','10018','2365','Bank St','London','Ontario','T5Y6U7','Canada');
+insert into addresses values ('107050-2241','10019','743','Young St','Mississauga','Ontario','Y6U7I8','Canada');
+insert into addresses values ('107078-4183','10020','624','Dawn Crt','Oshawa','Ontario','E3R4Y6','Canada');
+insert into addresses values ('107078-4184','10021','999','Spongebob Way','Ottawa','Ontario','T5I8O9','Canada');
+insert into addresses values ('107078-4185','10022','113','Patrick Pvt','Ottawa','Ontario','W2R4T5','Canada');
+insert into addresses values ('107078-4186','10023','174','Squidward Ave','Montreal','Quebec','O9I8U7','Canada');
+insert into addresses values ('107078-4187','10024','3','Holly Ave','Montreal','Quebec','U7Y6T5','Canada');
+insert into addresses values ('107078-4188','10025','5','Science St','Montreal','Quebec','T5R4R3','Canada');
 
 -- waiting for ORDER to complete Handles 
 
