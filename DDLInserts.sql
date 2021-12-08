@@ -202,9 +202,9 @@ insert into handles values ('107078-4188','00000');
 
 
 insert into addresses values ('107020-1','10000','123','Sesame St','Ottawa','Ontario','K1T5F3','Canada');
-insert into addresses values ('107020-10','10001','231'.'Owl Lane'.'Kingston','Ontario','K1T5FS3','Canada');
+insert into addresses values ('107020-10','10001','231','Owl Lane','Kingston','Ontario','K1T5FS3','Canada');
 insert into addresses values ('107020-11','10002','12','Joke St','Hamilton','Ontario','K125F3','Canada');
-insert into addresses values ('107020-12','10003','3'.'DMS Ave','Toronto','Ontario','K4T5F3','Canada');
+insert into addresses values ('107020-12','10003','3','DMS Ave','Toronto','Ontario','K4T5F3','Canada');
 insert into addresses values ('107020-13','10004','65','Comp Dr','Los Angeles','California','97263','USA');
 insert into addresses values ('107020-14','10005','346','Art St','New York','New York','78990','USA');
 insert into addresses values ('107020-15','10006','654','Arch St',' Chicago','Illinois','67893','USA');
