@@ -67,3 +67,46 @@ begin atomic
 -- Report: Inventory return one value on total stock
 
 -- Report: Inventory return one value on number of distinct authors
+
+
+
+
+/* Owner adding books query */
+
+insert into book values (ISBN, name, author_firstname, author_lastname, genre, num_pages, rating, price, stock, publisher_id, publisher_percent, format);
+
+/* Owner removing books query with ISBN */
+
+DELETE FROM book WHERE ISBN = '';
+
+
+/* Materialized View for Sales vs Expenditure Report */
+
+CREATE MATERIALIZED VIEW salesVsExpen AS
+SELECT EXTRACT(YEAR  FROM order_date) as Year, EXTRACT(MONTH  FROM order_date) as Month, SUM(total_price) AS Sales, 500 as expenditure
+    FROM Orders
+GROUP BY month, year
+ORDER BY month;
+
+
+/* Materialized View for Sales per Author Report */
+CREATE MATERIALIZED VIEW salesPerAuthor AS
+Select author_firstname, author_lasrname, SUM(price) as sales
+From book LEFT JOIN inOrder on book.ISBN = inOrder.ISBN
+Group by author_firstname, author_lasrname
+
+
+/* Materialized View for Sales per Genre Report */
+CREATE MATERIALIZED VIEW salesPerGenre AS
+Select genre, SUM(price) as sales
+From book LEFT JOIN inOrder on book.ISBN = inOrder.ISBN
+Group by genre
+
+
+/* Materialized View for Sales per Publisher Report */
+CREATE MATERIALIZED VIEW salesPerPublisher AS
+Select publisher_name, SUM((publisher_percent/100) * price) as percentage_sale
+From book LEFT JOIN inOrder on book.ISBN = inOrder.ISBN
+		  RIGHT JOIN publisher on publisher.publisher_id = book.publisher_id
+		  
+Group By publisher_name
