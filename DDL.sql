@@ -111,20 +111,6 @@ create table owners
         primary key (owner_ID)
     );
 
-create table order_ISBN
-    (
-        order_id               integer not null,
-        user_ID        		integer not null,
-        ISBN                   varchar(18),
-
-        primary key (order_id, user_ID, ISBN),
-        foreign key (user_id) references users
-            on delete cascade,
-        foreign key (order_id) references orders
-            on delete cascade,
-        foreign key (ISBN) references book
-    );
-
 
 
 create table publishes
