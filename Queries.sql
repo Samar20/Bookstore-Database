@@ -50,16 +50,6 @@ group by user_id, user_email
 -- USER ID SHOULD BE SERIAL
 insert into user (user_ID, user_name, user_email, user_phonenumber, user_password, street_number, street_name, city, prov, postal_code, country, 0)
 
--- Trigger
--- Running low on book
-create trigger orderMoreBooks after update of book on stock
-referencing new row as nrow
-referencing old row as orow
-for each row
-when nrow >= 4
-begin atomic
-	update book
-	set
 
 -- Materialized View
 -- Report: Inventory return one value on how many different types of books
@@ -110,3 +100,10 @@ From book LEFT JOIN inOrder on book.ISBN = inOrder.ISBN
 		  RIGHT JOIN publisher on publisher.publisher_id = book.publisher_id
 		  
 Group By publisher_name
+
+
+
+/* A new Order is placed by user */
+
+insert into orders values (user_id, curdate(), total_price, no_of_items, 'Succefully Placed Order');
+insert into inOrder values (order_id, ISBN);

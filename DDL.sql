@@ -55,7 +55,7 @@ create table book
 
 create table orders
     (
-        order_id       varchar(15) not null,
+        order_id       SERIAL UNIQUE,
         user_ID        integer, 
         order_date       DATE,
         total_price       numeric(4,2) check (total_price > 0), 
@@ -65,10 +65,12 @@ create table orders
         foreign key (user_ID) references users
     );
 
+ALTER SEQUENCE orders_order_id_seq RESTART WITH 107021 INCREMENT BY 1;
+
 
 create table inOrder
     (
-        order_id       varchar(15) not null,
+        order_id       integer not null,
         ISBN       varchar(18), 
         primary key (order_id, ISBN),
         foreign key (order_id) references orders
@@ -81,7 +83,7 @@ create table inOrder
 
 create table buys
     (
-        order_id       varchar(15) not null,
+        order_id       integer not null,
         user_ID        integer not null,
         primary key (order_ID),
         foreign key (order_id) references orders
@@ -109,20 +111,6 @@ create table owners
         primary key (owner_ID)
     );
 
-create table order_ISBN
-    (
-        order_id               varchar(15) not null,
-        user_ID        		integer not null,
-        ISBN                   varchar(18),
-
-        primary key (order_id, user_ID, ISBN),
-        foreign key (user_id) references users
-            on delete cascade,
-        foreign key (order_id) references orders
-            on delete cascade,
-        foreign key (ISBN) references book
-    );
-
 
 
 create table publishes
@@ -139,7 +127,7 @@ create table publishes
 
 create table handles
     (
-        order_id                varchar(15),
+        order_id                integer,
         owner_ID                varchar(5),
 
         primary key (order_id), 
@@ -150,7 +138,7 @@ create table handles
 
 create table addresses
     (
-        order_id                varchar(15),
+        order_id                integer,
         address_id              SERIAL UNIQUE,
         street_number           varchar(35) not null, 
         street_name             varchar(35) not null, 
