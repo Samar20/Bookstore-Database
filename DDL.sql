@@ -55,7 +55,7 @@ create table book
 
 create table orders
     (
-        order_id       varchar(15) not null,
+        order_id       varchar(15) not null AUTO_INCREMENT,
         user_ID        integer, 
         order_date       DATE,
         total_price       numeric(4,2) check (total_price > 0), 
