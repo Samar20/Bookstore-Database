@@ -1,19 +1,46 @@
-def viewInventory():
+import psycopg2
+import pandas as pd
+
+
+
+
 
     
 
-def addNewBooks():
+
+#def viewInventory():
+
+    
+
+#def addNewBooks():
 
 
-def removeBooks():
+#def removeBooks():
 
 def viewReports():
+ 
+    conn = psycopg2.connect(host="localhost", port = 8080, database="bookstore", user="postgres", password=90210)
+
+    # Create a cursor object
+    cur = conn.cursor()
+
+    # A sample query of all data from the "vendors" table in the "suppliers" database
+    #cur.execute("""SELECT * FROM salesPerPublisher""")
+    query_results = pd.read_sql('SELECT * FROM salesPerPublisher', conn)
 
 
-def viewOrders():
+    print(query_results)
+
+    # Close the cursor and connection to so the server can allocate
+    # bandwidth to other requests
+    cur.close()
+    conn.close()
 
 
-def sendMoney():
+#def viewOrders():
+
+
+#def sendMoney():
 
 
 
@@ -31,29 +58,30 @@ def main():
 
     selection = input("Please select an option (0-6): \n")
 
-    if(selection == "0"):
-        logOut()
+    # if(selection == "0"):
+    #     logOut()
 
-    if(selection == "1"):
-        viewInventory()
+    # if(selection == "1"):
+    #     viewInventory()
     
-    if(selection == "2"):
-        addNewBooks()
+    # if(selection == "2"):
+    #     addNewBooks()
 
-    if(selection == "3"):
-        removeBooks()
+    # if(selection == "3"):
+    #     removeBooks()
 
 
     if(selection == "4"):
         viewReports()
 
 
-    if(selection == "5"):
-        viewOrders()
+    # if(selection == "5"):
+    #     viewOrders()
 
 
-    if(selection == "6"):
-        sendMoney()    
+    # if(selection == "6"):
+    #     sendMoney()    
     
 
 
+main()

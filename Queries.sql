@@ -81,9 +81,9 @@ ORDER BY month;
 
 /* Materialized View for Sales per Author Report */
 CREATE MATERIALIZED VIEW salesPerAuthor AS
-Select author_firstname, author_lasrname, SUM(price) as sales
+Select author_firstname, author_lastname, SUM(price) as sales
 From book LEFT JOIN inOrder on book.ISBN = inOrder.ISBN
-Group by author_firstname, author_lasrname
+Group by author_firstname, author_lastname
 
 
 /* Materialized View for Sales per Genre Report */
@@ -95,7 +95,7 @@ Group by genre
 
 /* Materialized View for Sales per Publisher Report */
 CREATE MATERIALIZED VIEW salesPerPublisher AS
-Select publisher_name, SUM((publisher_percent/100) * price) as percentage_sale
+Select publisher_name as Publisher_Name, SUM((publisher_percent/100) * price) as Total_Profits
 From book LEFT JOIN inOrder on book.ISBN = inOrder.ISBN
 		  RIGHT JOIN publisher on publisher.publisher_id = book.publisher_id
 		  
