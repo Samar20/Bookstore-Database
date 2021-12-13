@@ -106,4 +106,5 @@ Group By publisher_name
 /* A new Order is placed by user */
 
 insert into orders values (user_id, curdate(), total_price, no_of_items, 'Succefully Placed Order');
-insert into inOrder values (order_id, ISBN);
+insert into inOrder values (order_id, ISBN); -- Dependant on how many books
+insert into buys values (order_id, user_id);
