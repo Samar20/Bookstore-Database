@@ -238,21 +238,21 @@ cur = conn.cursor()
 pd.set_option("display.max_rows", None, "display.max_columns", None)
 pd.set_option('expand_frame_repr', False)
 
-cur.execute(open("DDL.sql", "r").read())
-cur.execute(open("DDLInserts.sql", "r").read())
-cur.execute("SELECT * FROM test;")
-cur.fetchone()
-conn.commit() # Make the changes to the database persistent
-cur.execute("SELECT * FROM users;")
-df = DataFrame(cur.fetchall())
-df.columns=[ x.name for x in cur.description ]
-print(df)
-Close communication with the database
-cur.close()
-conn.close()
+# cur.execute(open("DDL.sql", "r").read())
+# cur.execute(open("DDLInserts.sql", "r").read())
+# cur.execute("SELECT * FROM test;")
+# cur.fetchone()
+# conn.commit() # Make the changes to the database persistent
+# cur.execute("SELECT * FROM users;")
+# df = pd.DataFrame(cur.fetchall())
+# df.columns=[ x.name for x in cur.description ]
+# print(df)
+# Close communication with the database
+# cur.close()
+# conn.close()
 
-cur.execute(open("DDL.sql", "r").read())
-cur.execute(open("DDLInserts.sql", "r").read())
+# cur.execute(open("DDL.sql", "r").read())
+# cur.execute(open("DDLInserts.sql", "r").read())
 
 def landing_page():
     print("\n#####################################\n")
@@ -443,7 +443,6 @@ def searchBook(userID, cart):
 def main():
     cart = []
 
-    #owner_screen()
     landing_page()
     selection = input()
     print('selection is', selection)
@@ -464,6 +463,7 @@ def main():
         create_account()
     elif(selection=='3'):
         owner_login()
+        owner_screen()
     else:
         print("ERROR: Invalid choice! Please choose an option from the menu (1-3)")
 
