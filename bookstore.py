@@ -1,6 +1,7 @@
-from os import path
-from numpy import intp
+from os import path, spawnl
+from numpy import add, intp
 from numpy.core.getlimits import _discovered_machar
+from numpy.lib.function_base import select
 from numpy.lib.shape_base import dstack
 import psycopg2
 import pandas as pd
@@ -279,7 +280,8 @@ def user_login():
         return 0
         
     else:
-        print("Success! Logged in as", username, 'with ID', userID)
+        print("Success! Logged in as", username, 'with ID', userID[0])
+        userID = str(userID[0])
         return userID
 
 def owner_login():
@@ -300,6 +302,7 @@ def owner_login():
         
     else:
         print("Success! Logged in as", username, 'with ID', ownerID)
+        ownerID = str(ownerID[0])
         return ownerID
 
 
@@ -330,6 +333,7 @@ def create_account():
         print("Error with either username or password.")
     else:
         print("Successfully created an account! Logged in as", user_email, 'with ID', userID)
+        userID = str(userID[0])
         return userID
 
 def bookCatalogue(userID, cart):
@@ -341,17 +345,115 @@ def bookCatalogue(userID, cart):
     if (selection == '1'):
         searchBook(userID, cart)
     if (selection == '2'):
-        viewCart(userID, cart)
+        df_cart = viewCart(userID, cart)
+        print("\n[1] Checkout")
+        print("[2] Continue Shopping")
+        selection = input()
+        if(selection == '1'):
+            checkout(userID, cart, df_cart)
+        elif(selection == '2'):
+            bookCatalogue(userID, cart)
+        else:
+            print("Error! (FIX THIS)")
 
 def viewCart(userID, cart):
-    df_cart = pd.DataFrame()
+    
+    cartList = []
+    df_cart = pd.DataFrame(cartList)
+    if not cart:
+        print("Cart is empty")
+        bookCatalogue(userID, cart)
     for book in cart:
         SQL = "select isbn, name, author_firstname, author_lastname, genre, num_pages, rating, price, stock, format from book where ISBN = '{isbn}';".format(isbn=book)
         cur.execute(SQL)
-        print(cur.fetchall())
+        # print(cur.fetchall())
+        # cartList.append(cur.fetchall())
         df_cart = df_cart.append(cur.fetchall())
-    # df_cart.columns=['ISBN', 'Title', 'Author FirstName', 'Author LastName', 'Genre', 'Pages', 'Rating', 'Price', 'Stock', 'Format']
+    # df_cart = pd.DataFrame(cartList)
+    df_cart.columns=['ISBN', 'Title', 'Author FirstName', 'Author LastName', 'Genre', 'Pages', 'Rating', 'Price', 'Stock', 'Format']
     print(df_cart)
+
+    return df_cart
+    
+
+def checkout(userID, cart, df_cart):
+    print("\n#####################################\n")
+    print("Checkout")
+    viewCart(userID, cart)
+    print("\n#####################################\n")
+    print("userid is: " + userID)
+    SQL = "select street_number, street_name, city, prov, postal_code, country from users where user_id = {userID};".format(userID=userID)
+    print(SQL)
+    cur.execute(SQL)
+    adrs = cur.fetchone()
+    address = adrs[0] + " " + adrs[1] + " " + adrs[2] + " " + adrs[3] + " " + adrs[4] + " " + adrs[5]
+    print("[1] Ship order to address on file: ", address)
+    print("[2] Ship to new address")
+    selection = input()
+    
+    orderID = createOrder(userID, df_cart, selection)
+    if(selection == '2'):
+        shipping(userID)
+
+def shipping(userID):
+    SQL = "select order_id from orders where user_id = {userID}".format(userID=userID)
+    cur.execute(SQL)
+    orderID = cur.fetchone()
+    orderID = str(orderID[0])
+
+    street_number = input("Street Number: ")
+    street_name = input("Street Name (Ex. Main St): ")
+    city = input("City: ")
+    prov = input("Province: ")
+    postal_code = input("Postal Code: ") 
+    country = input("Country: ")  
+    SQL = "insert into addresses (order_id, street_number, street_name, city, prov, postal_code, country) values ('{orderID}','{strNum}','{strName}','{city}','{prov}','{postal}','{country}');".format(orderID=orderID, strNum=strNum, strName=strName, city=cityy, prov=provv, postal=pc, country=cntry)
+    cur.execute(SQL)
+
+def createOrder(userID, df_cart, selection):
+    dateSQL = "SELECT CURRENT_DATE;"
+    cur.execute(dateSQL)
+    date = cur.fetchone()
+    total = df_cart.Price.sum()
+    SQL = "insert into orders (user_id, order_date, total_price, no_of_items, status_order) values ({userID},'{date}','{total}','1','Pending Shipment');".format(userID=userID, date=date[0], total=total)
+    cur.execute(SQL)
+    conn.commit()
+    SQL = "select MAX(order_id) from orders where user_id = {userID}".format(userID=userID)
+    cur.execute(SQL)
+    orderID = cur.fetchone()
+    orderID = str(orderID[0])
+    for book in df_cart.ISBN:
+        SQL = "insert into inOrder values('{orderID}','{book}');".format(orderID=orderID, book=book)
+        cur.execute(SQL)
+        conn.commit()
+
+    if(selection=='1'):
+    # Add current address to ADDRESSES
+        SQL = "select * from users where user_id = {userID}".format(userID=userID)
+        cur.execute(SQL)
+        userInfo = cur.fetchone()
+        strNum = str(userInfo[5])
+        strName = str(userInfo[6])
+        cityy = str(userInfo[7])
+        provv = str(userInfo[8])
+        pc = str(userInfo[9])
+        cntry = str(userInfo[10])
+        SQL = "insert into addresses (order_id, street_number, street_name, city, prov, postal_code, country) values ('{orderID}','{strNum}','{strName}','{city}','{prov}','{postal}','{country}');".format(orderID=orderID, strNum=strNum, strName=strName, city=cityy, prov=provv, postal=pc, country=cntry)
+        cur.execute(SQL)
+        conn.commit()
+
+    print("Order Successfully Placed!")
+    print(orderID, "is your Tracking Number")
+
+    print("\n\n[1] Main Menu")
+    print("Press any key to quit and log out")
+
+    selection = input()
+    if (selection=="1"):
+        landing_page()
+    else:
+        exit(-1)
+    return orderID
 
 def searchBook(userID, cart):
     flag = True
@@ -360,8 +462,8 @@ def searchBook(userID, cart):
     print("[2] ISBN")
     print("[3] Author")
     print("[4] Genre")
-    print("[5] Rating")
-    print("[6] Rating (all inclsuive and above)")
+    print("[5] Rating (Show ONLY one rating)")
+    print("[6] Rating (Show ratings >= input)")
     selection = input()
     if (selection == '1'):
         titleSearch = input("Please enter title (Case sensitive): ")
@@ -452,13 +554,14 @@ def main():
         # If there was an error with the login, they go here
         while(loggedUser == 0):
             print("Error with either username or password.")
-            selection = input("Please press [1] to try again or press [0] to return to the main menu.")
+            selection = input("Please press [1] to try again or press [0] to return to the main menu: ")
             if selection=='1':
                 loggedUser = user_login()
             else:
-                landing_page()
-                break
+                main()
+                # break
         bookCatalogue(loggedUser, cart)
+
     elif(selection=='2'):
         create_account()
 
