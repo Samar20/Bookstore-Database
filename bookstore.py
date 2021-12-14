@@ -270,7 +270,7 @@ def user_login():
     # cur.execute("Select * from users")
     SQL = "SELECT user_ID FROM users WHERE user_email = '{uname}' AND user_password = '{psswrd}';".format(uname=username, psswrd=password)
     # SQL = (SQL,username)
-    print(SQL)
+    # print(SQL)
     cur.execute(SQL)
     userID = cur.fetchone()
     # df_pass = DataFrame(cur.fetchall())
@@ -288,9 +288,9 @@ def owner_login():
     username = input("Please enter your username (email): ")
     password = input("Please enter your password: ")
     # cur.execute("Select * from users")
-    SQL = "SELECT user_ID FROM owners WHERE owner_email = '{uname}' AND owner_password = '{psswrd}';".format(uname=username, psswrd=password)
+    SQL = "SELECT owner_ID FROM owners WHERE owner_email = '{uname}' AND owner_password = '{psswrd}';".format(uname=username, psswrd=password)
     # SQL = (SQL,username)
-    print(SQL)
+    # print(SQL)
     cur.execute(SQL)
     ownerID = cur.fetchone()
     # df_pass = DataFrame(cur.fetchall())
@@ -461,8 +461,18 @@ def main():
         bookCatalogue(loggedUser, cart)
     elif(selection=='2'):
         create_account()
+
     elif(selection=='3'):
-        owner_login()
+        loggedOwner = owner_login()
+        while(loggedOwner == 0):
+            print("Error with either username or password.")
+            selection = input("Please press [1] to try again or press [0] to return to the main menu. ")
+            if selection=='1':
+                loggedOwner = owner_login()
+                print(loggedOwner)
+            else:
+                landing_page()
+                break
         owner_screen()
     else:
         print("ERROR: Invalid choice! Please choose an option from the menu (1-3)")
