@@ -16,9 +16,9 @@ def addNewBooks():
     name = input("Please enter the Title of the book: ")
     firstname = input("Please enter the Author's First Name: ")
     lastname = input("Please enter the Author's Last Name: ")
-    genre = input("Please enter the Genre of the book: ")
+    genre = input("Please enter the Genre of the book (Please choose from: Childrens, Fiction, Memoir, Mystery, Nonfiction, Romance, SciFi/Fantasy, Young Adult): ")
     numPages = input("Please enter the number of pages in the book: ")
-    rating = 0
+    rating = 0.00
     price = input("Please enter the Price of the book: ")
     stock = input("Please enter the current number of books in stock: ")
     publisherId = input("Please enter the Publisher id for the book: ")
