@@ -41,10 +41,10 @@ create table book
 	    author_firstname       varchar(20) not null,
         author_lastname        varchar(20) ,
 	    genre       varchar(15) check (genre in ('Childrens', 'Fiction', 'Memoir', 'Mystery', 'Nonfiction', 'Romance', 'SciFi/Fantasy', 'Young Adult')),
-        num_pages       numeric(5,0) check(num_pages > 1),
-        rating       numeric(1,0) check (rating > -1 and rating < 6),
+        num_pages       numeric(4,2) check(num_pages > 1),
+        rating       integer check (rating > -1 and rating < 6),
         price       numeric(4,2) check (price >= 0),
-        stock       numeric(5,2),
+        stock       integer,
         publisher_id       varchar(5) not null,
         publisher_percent       numeric(4,2),
         format       varchar(30),
@@ -76,6 +76,7 @@ create table inOrder
         foreign key (order_id) references orders
             on delete cascade,
         foreign key(ISBN) references book
+            on delete cascade
 
 
 
