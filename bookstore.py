@@ -233,18 +233,23 @@ def owner_screen():
 conn = psycopg2.connect(host="localhost", port = 8080, database="bookstore", user="postgres", password=90210)
 cur = conn.cursor()
 
-# cur.execute(open("DDL.sql", "r").read())
-# cur.execute(open("DDLInserts.sql", "r").read())
-# cur.execute("SELECT * FROM test;")
-# cur.fetchone()
-# conn.commit() # Make the changes to the database persistent
-# cur.execute("SELECT * FROM users;")
-# df = DataFrame(cur.fetchall())
-# df.columns=[ x.name for x in cur.description ]
-# print(df)
-# Close communication with the database
-# cur.close()
-# conn.close()
+
+cur.execute(open("DDL.sql", "r").read())
+cur.execute(open("DDLInserts.sql", "r").read())
+cur.execute("SELECT * FROM test;")
+cur.fetchone()
+conn.commit() # Make the changes to the database persistent
+cur.execute("SELECT * FROM users;")
+df = DataFrame(cur.fetchall())
+df.columns=[ x.name for x in cur.description ]
+print(df)
+Close communication with the database
+cur.close()
+conn.close()
+
+cur.execute(open("DDL.sql", "r").read())
+cur.execute(open("DDLInserts.sql", "r").read())
+
 
 def landing_page():
     print("\n#####################################\n")
@@ -268,14 +273,32 @@ def user_login():
     # df_pass = DataFrame(cur.fetchall())
     # df_pass.columns=[ x.name for x in cur.description ]
     if(userID == None):
-        print("Error with either username or password.")
-        selection = input("Please press [1] to try again or press [0] to return to the main menu.")
-        if selection=='1':
-            user_login()
-        else:
-            landing_page()
+        return 0
+        
     else:
         print("Success! Logged in as", username, 'with ID', userID)
+        return userID
+
+def owner_login():
+    print("\n#####################################\n")
+    print("Owner Login Page")
+    username = input("Please enter your username (email): ")
+    password = input("Please enter your password: ")
+    # cur.execute("Select * from users")
+    SQL = "SELECT user_ID FROM owners WHERE owner_email = '{uname}' AND owner_password = '{psswrd}';".format(uname=username, psswrd=password)
+    # SQL = (SQL,username)
+    print(SQL)
+    cur.execute(SQL)
+    ownerID = cur.fetchone()
+    # df_pass = DataFrame(cur.fetchall())
+    # df_pass.columns=[ x.name for x in cur.description ]
+    if(ownerID == None):
+        return 0
+        
+    else:
+        print("Success! Logged in as", username, 'with ID', ownerID)
+        return ownerID
+
 
 def create_account():
     print("\n#####################################\n")
@@ -292,32 +315,47 @@ def create_account():
     postal_code = input("Postal Code: ")
     country = input("Country: ")
 
-    SQL = "insert into users (DEFAULT, '{name}', '{user_email}', '{user_phonenumber}', '{user_password}', '{street_number}', '{street_name}', '{city}', '{prov}', '{postal_code}', '{country}', 0);".format(name=name, user_email=user_email, user_phonenumber=user_phonenumber, user_password=user_password, street_number=street_number, street_name=street_name, city=city, prov=prov, postal_code=postal_code, country=country)
+    SQL = "insert into users (user_name, user_email, user_phonenumber, user_password, street_number, street_name, city, prov, postal_code, country, member_years) values ('{name}', '{user_email}', '{user_phonenumber}', '{user_password}', '{street_number}', '{street_name}', '{city}', '{prov}', '{postal_code}', '{country}', 0);".format(name=name, user_email=user_email, user_phonenumber=user_phonenumber, user_password=user_password, street_number=street_number, street_name=street_name, city=city, prov=prov, postal_code=postal_code, country=country)
     cur.execute(SQL)
     conn.commit()
 
-    SQL = "SELECT user_ID FROM users WHERE user_email = '{uname}' AND user_password = '{psswrd}';".format(uname=username, psswrd=password)
+    SQL = "SELECT user_ID FROM users WHERE user_email = '{uname}' AND user_password = '{psswrd}';".format(uname=user_email, psswrd=user_password)
     cur.execute(SQL)
     userID = cur.fetchone()
 
     if(userID == None):
         print("Error with either username or password.")
     else:
-        print("Success! Logged in as", user_email, 'with ID', userID)
+        print("Successfully created an account! Logged in as", user_email, 'with ID', userID)
+        return userID
+    
 
 def main():
-    owner_screen()
-    # landing_page()
-    # selection = input()
-    # print('selection is', selection)
-    # if(selection=='1'):
-    #     user_login()
-    # elif(selection=='2'):
-    #     create_account()
-    # # elif(selection=='3'):
-    # #     owner_login
-    # else:
-    #     print("ERROR: Invalid choice! Please choose an option from the menu (1-3)")
+
+    #owner_screen()
+  
+
+
+    landing_page()
+    selection = input()
+    print('selection is', selection)
+    if(selection=='1'):
+        loggedUser = user_login()
+
+        # If there was an error with the login, they go here
+        if(loggedUser == 0):
+            print("Error with either username or password.")
+            selection = input("Please press [1] to try again or press [0] to return to the main menu.")
+            if selection=='1':
+                user_login()
+            else:
+                landing_page()
+    elif(selection=='2'):
+        create_account()
+    elif(selection=='3'):
+        owner_login()
+    else:
+        print("ERROR: Invalid choice! Please choose an option from the menu (1-3)")
 
     
 
