@@ -231,3 +231,37 @@ insert into addresses values ('107045',DEFAULT,'3','Holly Ave','Montreal','Quebe
 insert into addresses values ('107046',DEFAULT,'5','Science St','Montreal','Quebec','T5R4R3','Canada');
 
 
+
+/* Materialized View for Sales vs Expenditure Report */
+
+CREATE MATERIALIZED VIEW salesVsExpen AS
+SELECT EXTRACT(YEAR  FROM order_date) as Year, EXTRACT(MONTH  FROM order_date) as Month, SUM(total_price) AS Sales, 500 as expenditure
+    FROM Orders
+GROUP BY month, year
+ORDER BY month;
+
+
+/* Materialized View for Sales per Author Report */
+CREATE MATERIALIZED VIEW salesPerAuthor AS
+Select author_firstname, author_lastname, SUM(price) as sales
+From book LEFT JOIN inOrder on book.ISBN = inOrder.ISBN
+Group by author_firstname, author_lastname;
+
+
+/* Materialized View for Sales per Genre Report */
+CREATE MATERIALIZED VIEW salesPerGenre AS
+Select genre, SUM(price) as sales
+From book LEFT JOIN inOrder on book.ISBN = inOrder.ISBN
+Group by genre;
+
+
+/* Materialized View for Sales per Publisher Report */
+CREATE MATERIALIZED VIEW salesPerPublisher AS
+Select publisher_name as Publisher_Name, SUM((publisher_percent/100) * price) as Total_Profits
+From book LEFT JOIN inOrder on book.ISBN = inOrder.ISBN
+		  RIGHT JOIN publisher on publisher.publisher_id = book.publisher_id
+		  
+Group By publisher_name;
+
+
+
