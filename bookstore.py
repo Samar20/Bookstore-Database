@@ -1,7 +1,7 @@
 from os import path
+from numpy import intp
 import psycopg2
-from pandas import DataFrame
-
+import pandas as pd
 
 # def viewInventory():
 
@@ -50,12 +50,14 @@ from pandas import DataFrame
 
 #     if(selection == "6"):
 #         sendMoney()    
-    
+
 conn = psycopg2.connect("dbname=bookstore user=postgres password=abcd123")
 cur = conn.cursor()
+pd.set_option("display.max_rows", None, "display.max_columns", None)
+pd.set_option('expand_frame_repr', False)
 
-cur.execute(open("DDL.sql", "r").read())
-cur.execute(open("DDLInserts.sql", "r").read())
+# cur.execute(open("DDL.sql", "r").read())
+# cur.execute(open("DDLInserts.sql", "r").read())
 
 def landing_page():
     print("\n#####################################\n")
@@ -134,7 +136,71 @@ def create_account():
     else:
         print("Successfully created an account! Logged in as", user_email, 'with ID', userID)
         return userID
-    
+
+def bookCatalogue(userID):
+    print("\n#####################################\n")
+    print("Hello", userID, "Welcome to the bookstore!\n")
+    print("[1] Search for book (by Title, ISBN, Author, Genre, Rating)")
+    print("[2] View Cart")
+    selection = input()
+    if (selection == '1'):
+        searchBook()
+
+def searchBook():
+    print("Would you like to search for a book by: ")
+    print("[1] Title")
+    print("[2] ISBN")
+    print("[3] Author")
+    print("[4] Genre")
+    print("[5] Rating")
+    print("[6] Rating (all inclsuive and above)")
+    selection = input()
+    if (selection == '1'):
+        titleSearch = input("Please enter title (Case sensitive): ")
+        SQL = "select isbn, name, author_firstname, author_lastname, genre, num_pages, rating, price, stock, format from book where name = '{name}';".format(name=titleSearch)
+        cur.execute(SQL)
+        df_search = pd.DataFrame(cur.fetchall())
+        df_search.columns=[ x.name for x in cur.description ]
+        print(df_search)
+    elif (selection == '2'):
+        isbnSearch = input("Please enter ISBN: ")
+        SQL = "select isbn, name, author_firstname, author_lastname, genre, num_pages, rating, price, stock, format from book where ISBN = '{isbn}';".format(name=isbnSearch)
+        cur.execute(SQL)
+        df_search = pd.DataFrame(cur.fetchall())
+        df_search.columns=[ x.name for x in cur.description ]
+        print(df_search)
+    elif (selection == '3'):
+        authorFirstSearch = input("Please enter Author's Name' ")
+        first, last = authorFirstSearch.split(" ")
+        SQL = "select isbn, name, author_firstname, author_lastname, genre, num_pages, rating, price, stock, format from book where author_firstname = '{firstname}' or author_lastname = '{lastname}' group by isbn, author_lastname;".format(firstname=first, lastname=last)
+        cur.execute(SQL)
+        df_search = pd.DataFrame(cur.fetchall())
+        df_search.columns=[ x.name for x in cur.description ]
+        print(df_search)
+    elif (selection == '4'):
+        genreSearch = input("Please enter Genre: ")
+        SQL = "select isbn, name, author_firstname, author_lastname, genre, num_pages, rating, price, stock, format from book where genre = '{genre}' group by isbn, genre;".format(genre=genreSearch)
+        cur.execute(SQL)
+        df_search = pd.DataFrame(cur.fetchall())
+        df_search.columns=[ x.name for x in cur.description ]
+        print(df_search)
+    elif (selection == '5'):
+        ratingSearch = input("Please enter Rating (specific number from 1-5): ")
+        SQL = "select isbn, name, author_firstname, author_lastname, genre, num_pages, rating, price, stock, format from book where rating = '{rating}' group by isbn, rating;".format(rating=ratingSearch)
+        cur.execute(SQL)
+        df_search = pd.DataFrame(cur.fetchall())
+        df_search.columns=[ x.name for x in cur.description ]
+        print(df_search)
+    elif (selection=='6'):
+        ratingSearch = input("Please enter Rating (Number from 1-5), ex. 4, results will be all books higher than (and equal to) 4: ")
+        SQL = "select isbn, name, author_firstname, author_lastname, genre, num_pages, rating, price, stock, format from book where rating >= '{rating}' group by isbn, rating;".format(rating=ratingSearch)
+        cur.execute(SQL)
+        df_search = pd.DataFrame(cur.fetchall())
+        df_search.columns=[ x.name for x in cur.description ]
+        print(df_search)
+    else:
+        print("ERROR: Invalid choice! Please choose an option from the menu (1-6)")
+        searchBook()
 
 def main():
     landing_page()
@@ -151,6 +217,8 @@ def main():
                 user_login()
             else:
                 landing_page()
+        else:
+            bookCatalogue(loggedUser)
     elif(selection=='2'):
         create_account()
     elif(selection=='3'):
