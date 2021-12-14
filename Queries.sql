@@ -52,12 +52,16 @@ insert into users (user_ID, user_name, user_email, user_phonenumber, user_passwo
 -- INDU - FINISH
 
 -- Report: Inventory return one value on how many different types of books
+select count(DISTINCT genre) as genre
+from book
 
 -- Report: Inventory return one value on total stock
+select sum(stock) as total
+from book
 
 -- Report: Inventory return one value on number of distinct authors
-
-
+select count(DISTINCT auth_name)
+from (SELECT CONCAT(author_firstname, ' ', author_lastname) AS auth_name FROM book) as authorCount
 
 
 /* Owner adding books query */
