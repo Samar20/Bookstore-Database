@@ -5,7 +5,51 @@ from numpy.lib.shape_base import dstack
 import psycopg2
 import pandas as pd
 
-# def viewInventory():
+def viewInventory():
+
+    conn = psycopg2.connect(host="localhost", port = 8080, database="bookstore", user="postgres", password=90210)
+    cur = conn.cursor()
+
+    print("[1] Number of different types of books \n")
+    print("[2] Total stock in warehouse \n")
+    print("[3] Number of distinct authors \n")
+    print("[0] Go back to landing page \n")
+
+    selection = input("Please select an option (0-4): ")
+
+    print("\n#####################################\n")
+
+
+    if(selection == "1"):
+        cur.execute("""select count(DISTINCT genre) as genre from book""")
+        query = cur.fetchone()[0]
+        print(f" Number of different types of books: {query}")
+        print("\n#####################################\n")
+
+        viewInventory()
+
+
+    if(selection == "2"):
+        cur.execute("""select sum(stock) as total from book""")
+        query = cur.fetchone()[0]
+        print(f"Total stock in warehouse: {query}")
+        print("\n#####################################\n")
+
+        viewInventory()
+        
+    
+    if(selection == "3"):
+        cur.execute("""select count(DISTINCT auth_name) from (SELECT CONCAT(author_firstname, ' ', author_lastname) AS auth_name FROM book) as authorCount""")
+        query = cur.fetchone()[0]
+        print(f"Number of distinct authors: {query}")
+        print("\n#####################################\n")
+
+        viewInventory()
+
+    if(selection == "0"):
+        owner_screen()
+
+
 
 def addNewBooks():
 
@@ -211,8 +255,8 @@ def owner_screen():
 #     if(selection == "0"):
 #         logOut()
 
-#     if(selection == "1"):
-#         viewInventory()
+    if(selection == "1"):
+        viewInventory()
     
     if(selection == "2"):
         addNewBooks()
@@ -232,7 +276,8 @@ def owner_screen():
 #     if(selection == "6"):
 #         sendMoney()    
 
-conn = psycopg2.connect("dbname=bookstore user=postgres password=abcd123")
+# conn = psycopg2.connect("dbname=bookstore user=postgres password=abcd123")
+conn = psycopg2.connect(host="localhost", port = 8080, database="bookstore", user="postgres", password=90210)
 
 cur = conn.cursor()
 pd.set_option("display.max_rows", None, "display.max_columns", None)
