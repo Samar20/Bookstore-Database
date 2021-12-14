@@ -139,21 +139,28 @@ def create_account():
         print("Successfully created an account! Logged in as", user_email, 'with ID', userID)
         return userID
 
-def bookCatalogue(userID):
+def bookCatalogue(userID, cart):
     print("\n#####################################\n")
     print("Hello", userID, "Welcome to the bookstore!\n")
     print("[1] Search for book (by Title, ISBN, Author, Genre, Rating)")
     print("[2] View Cart")
     selection = input()
     if (selection == '1'):
-        searchBook(userID)
+        searchBook(userID, cart)
     if (selection == '2'):
-        viewCart()
+        viewCart(userID, cart)
 
-def viewCart():
-    pass
+def viewCart(userID, cart):
+    df_cart = pd.DataFrame()
+    for book in cart:
+        SQL = "select isbn, name, author_firstname, author_lastname, genre, num_pages, rating, price, stock, format from book where ISBN = '{isbn}';".format(isbn=book)
+        cur.execute(SQL)
+        print(cur.fetchall())
+        df_cart = df_cart.append(cur.fetchall())
+    # df_cart.columns=['ISBN', 'Title', 'Author FirstName', 'Author LastName', 'Genre', 'Pages', 'Rating', 'Price', 'Stock', 'Format']
+    print(df_cart)
 
-def searchBook(userID):
+def searchBook(userID, cart):
     flag = True
     print("Would you like to search for a book by: ")
     print("[1] Title")
@@ -173,7 +180,7 @@ def searchBook(userID):
 
     elif (selection == '2'):
         isbnSearch = input("Please enter ISBN: ")
-        SQL = "select isbn, name, author_firstname, author_lastname, genre, num_pages, rating, price, stock, format from book where ISBN = '{isbn}';".format(name=isbnSearch)
+        SQL = "select isbn, name, author_firstname, author_lastname, genre, num_pages, rating, price, stock, format from book where ISBN = '{isbn}';".format(isbn=isbnSearch)
         cur.execute(SQL)
         df_search = pd.DataFrame(cur.fetchall())
         df_search.columns=[ x.name for x in cur.description ]
@@ -214,7 +221,7 @@ def searchBook(userID):
 
     else:
         print("ERROR: Invalid choice! Please choose an option from the menu (1-6)")
-        searchBook(userID)
+        searchBook(userID, cart)
     
     while (flag):
             print("\nIf you would like to add a book to your cart, please enter the book number from your search result. \nIf you want to continue browsing press c. \n If you want to go back to the menu press b")
@@ -223,19 +230,20 @@ def searchBook(userID):
         
             if (selection == 'c' or selection == 'C'):
                 flag = False
-                searchBook(userID)
+                searchBook(userID, cart)
             elif(selection == 'b' or selection == 'B'):
                 flag = False
-                bookCatalogue(userID)
+                bookCatalogue(userID, cart)
             elif (0 <= int(selection) <= results-1):
                 if (df_search.at[int(selection), 'stock'] > 0):
                     flag = False
                     # Add book to cart
-                    # cart.append("BOOK")
-                    print("ENTERED BOOK", selection)
+                    cart.append(df_search.at[int(selection), 'isbn'])
+                    print("Book added to cart!", selection)
+                    bookCatalogue(userID, cart)
                 else:
                     print("Sorry! We are out of that book. Please choose another one")
-                    searchBook(userID)
+                    searchBook(userID, cart)
             else:
                 print("ERROR: Please enter a valid choice!!")
 
@@ -256,7 +264,7 @@ def main():
             else:
                 landing_page()
                 break
-        bookCatalogue(loggedUser)
+        bookCatalogue(loggedUser, cart)
     elif(selection=='2'):
         create_account()
     elif(selection=='3'):
