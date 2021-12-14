@@ -1,6 +1,6 @@
 delete from handles;
 delete from publishes;
-delete from order_ISBN;
+-- delete from order_ISBN;
 delete from owners;
 delete from buys;
 delete from inOrder;
