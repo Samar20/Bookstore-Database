@@ -1,41 +1,41 @@
 -- Query
 
 -- User - SearchByBook Title- 
-select isbn, name, author_firstname, author_lasrname, genre, num_pages, rating, price, stock, format
+select isbn, name, author_firstname, author_lastname, genre, num_pages, rating, price, stock, format
 from book
 where name = '_'
 
 -- User - SearchByAuthor (specific)
-select isbn, name, author_firstname, author_lasrname, genre, num_pages, rating, price, stock, format
+select isbn, name, author_firstname, author_lastname, genre, num_pages, rating, price, stock, format
 from book
-where author_firstname = '_' AND author_lasrname = '_'
+where author_firstname = '_' AND author_lastname = '_'
 group by isbn, author_firstname
 
 -- User - SearchByAuthor (specific)
-select isbn, name, author_firstname, author_lasrname, genre, num_pages, rating, price, stock, format 
+select isbn, name, author_firstname, author_lastname, genre, num_pages, rating, price, stock, format 
 from book
-where author_firstname = '_' or author_lasrname = '_'
-group by isbn, author_lasrname
+where author_firstname = '_' or author_lastname = '_'
+group by isbn, author_lastname
 
 -- User - SearchByISBN
-select isbn, name, author_firstname, author_lasrname, genre, num_pages, rating, price, stock, format
+select isbn, name, author_firstname, author_lastname, genre, num_pages, rating, price, stock, format
 from book
 where ISBN = '_' 
 
 -- User - SearchByGenre
-select isbn, name, author_firstname, author_lasrname, genre, num_pages, rating, price, stock, format
+select isbn, name, author_firstname, author_lastname, genre, num_pages, rating, price, stock, format
 from book
 where genre = 'Mystery' 
 group by isbn, genre
 
 -- User - SearchByRating (firm)
-select isbn, name, author_firstname, author_lasrname, genre, num_pages, rating, price, stock, format
+select isbn, name, author_firstname, author_lastname, genre, num_pages, rating, price, stock, format
 from book
 where rating = '_'
 group by isbn, rating
 
 -- User - SearchByRating (range - inclusive)
-select isbn, name, author_firstname, author_lasrname, genre, num_pages, rating, price, stock, format
+select isbn, name, author_firstname, author_lastname, genre, num_pages, rating, price, stock, format
 from book
 where rating >= '_'
 group by isbn, rating
@@ -47,7 +47,7 @@ where user_email = 'indumini@me.com' AND user_password = 'password123'
 group by user_id, user_email
 
 -- User - Creating a new account
-insert into user (user_ID, user_name, user_email, user_phonenumber, user_password, street_number, street_name, city, prov, postal_code, country, 0)
+insert into users (user_ID, user_name, user_email, user_phonenumber, user_password, street_number, street_name, city, prov, postal_code, country, 0)
 
 -- INDU - FINISH
 
@@ -80,9 +80,9 @@ ORDER BY month;
 
 /* Materialized View for Sales per Author Report */
 CREATE MATERIALIZED VIEW salesPerAuthor AS
-Select author_firstname, author_lasrname, SUM(price) as sales
+Select author_firstname, author_lastname, SUM(price) as sales
 From book LEFT JOIN inOrder on book.ISBN = inOrder.ISBN
-Group by author_firstname, author_lasrname
+Group by author_firstname, author_lastname
 
 
 /* Materialized View for Sales per Genre Report */
