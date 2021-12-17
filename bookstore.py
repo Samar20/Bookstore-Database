@@ -5,8 +5,13 @@ from numpy.lib.function_base import select
 from numpy.lib.shape_base import dstack
 import psycopg2
 import pandas as pd
+import time
+import sys
 
 def viewInventory():
+
+    print("\n#####################################\n")
+    print("\n View Inventory Page  \n")
 
     conn = psycopg2.connect(host="localhost", port = 8080, database="bookstore", user="postgres", password=90210)
     cur = conn.cursor()
@@ -16,12 +21,22 @@ def viewInventory():
     print("[3] Number of distinct authors \n")
     print("[0] Go back to landing page \n")
 
-    selection = input("Please select an option (0-4): ")
+    try:
+        selection = int(input("Please select an option (0-3): "))
+        while selection < 0 or selection > 3 :
+            print("\nWrong input please try again!\n")
+            selection = int(input("Please select an option (0-3): "))
+
+    except:
+        print("\nWrong input type please try again with an integer!\n")
+        viewInventory()
+
+    
 
     print("\n#####################################\n")
 
 
-    if(selection == "1"):
+    if(selection == 1):
         cur.execute("""select count(DISTINCT genre) as genre from book""")
         query = cur.fetchone()[0]
         print(f" Number of different types of books: {query}")
@@ -30,7 +45,7 @@ def viewInventory():
         viewInventory()
 
 
-    if(selection == "2"):
+    if(selection == 2):
         cur.execute("""select sum(stock) as total from book""")
         query = cur.fetchone()[0]
         print(f"Total stock in warehouse: {query}")
@@ -39,7 +54,7 @@ def viewInventory():
         viewInventory()
         
     
-    if(selection == "3"):
+    if(selection == 3):
         cur.execute("""select count(DISTINCT auth_name) from (SELECT CONCAT(author_firstname, ' ', author_lastname) AS auth_name FROM book) as authorCount""")
         query = cur.fetchone()[0]
         print(f"Number of distinct authors: {query}")
@@ -47,14 +62,14 @@ def viewInventory():
 
         viewInventory()
 
-    if(selection == "0"):
+    if(selection == 0):
         owner_screen()
 
 
 
 def addNewBooks():
-
-    print("Adding a new book page  \n")
+    print("\n#####################################\n")
+    print("\n Adding a New Book Page  \n")
 
     conn = psycopg2.connect(host="localhost", port = 8080, database="bookstore", user="postgres", password=90210)
     cur = conn.cursor()
@@ -78,23 +93,23 @@ def addNewBooks():
         pubPercent = input("Please enter the percentage of profit the publisher will recieve (in decimel form): ")
         format = input("Please enter the Format of the book: ")
 
-        # try:
-        cur.execute(f"""insert into book values ('{isbn}', '{name}', '{firstname}', '{lastname}', '{genre}', '{numPages}', '{rating}', '{price}', '{stock}', '{publisherId}', '{pubPercent}', '{format}')""")
+        try:
+            cur.execute(f"""insert into book values ('{isbn}', '{name}', '{firstname}', '{lastname}', '{genre}', '{numPages}', '{rating}', '{price}', '{stock}', '{publisherId}', '{pubPercent}', '{format}')""")
 
-        conn.commit()
+            conn.commit()
 
-        print("\n Successfully added the book to catalogue! \n Returning back to landing page \n")
-        owner_screen()
+            print("\n Successfully added the book to catalogue! \n Returning back to landing page \n")
+            owner_screen()
 
         ## Checking if book is inserted properly    
-        # except:
-        print("Failed to add new book \n")
-        selection = input("Select 0 to try again and 1 to go back to landing page:  ")
+        except:
+            print("Failed to add new book \n")
+            selection = input("Select 0 to try again and 1 to go back to landing page:  ")
 
-        if(selection == 0):
-            removeBooks()
-        else:
-            owner_screen()
+            if(selection == "0"):
+                removeBooks()
+            else:
+                owner_screen()
 
 
 
@@ -116,17 +131,20 @@ def addNewBooks():
 
 
 def removeBooks():
-
-    print("\n ** Removing a book page **  \n")
+    print("\n#####################################\n")
+    print("\n ** Removing a Book Page **  \n")
 
     conn = psycopg2.connect(host="localhost", port = 8080, database="bookstore", user="postgres", password=90210)
     cur = conn.cursor()
 
-    isbn = input("\n Please enter the ISBN of the book to be cleared from the warehouse: ")
+    isbn = input("\n Please enter the ISBN of the book to be cleared from the warehouse or 0 to exit to landing page: ")
+
+    if(isbn == "0"):
+        return owner_screen()
 
     ## Checking if book exists 
     query = pd.read_sql('SELECT ISBN FROM book', conn)
-    print(isbn in query['isbn'].values)
+
 
     if(isbn in query['isbn'].values):
         try:
@@ -166,9 +184,11 @@ def removeBooks():
 
 
 def viewReports():
-
+    print("\n#####################################\n")
     conn = psycopg2.connect(host="localhost", port = 8080, database="bookstore", user="postgres", password=90210)
     cur = conn.cursor()
+
+    print("\n View Reports Page  \n")
 
     print("[1] View Sales Vs Expenditure Report \n")
     print("[2] View Sales per Author Report \n")
@@ -176,73 +196,194 @@ def viewReports():
     print("[4] View Sales per Publisher \n")
     print("[0] Go back to landing page \n")
 
-    selection = input("Please select an option (0-4): ")
 
-    print("\n#####################################\n")
+    #Error handling for wrong input
+    try:
+        selection = int(input("Please select an option (0-4): "))
+        while selection < 0 or selection > 4 :
+            print("\nWrong input please try again!\n")
+            selection = int(input("Please select an option (0-4): "))
 
-    if(selection == "1"):
-        query = pd.read_sql('SELECT * FROM salesVsExpen', conn)
-        print(query)
+        if(selection != 0 ):
+            date = input("Please enter the time period of the report you wish to view (past month: 1, past two months: 2, past year: 12): ")
+            if(date == "12"):
+                date = "11"
+
+
+        #Error checking for correct month value
+        if(int(date) < 0):
+            raise Exception
+
+
         print("\n#####################################\n")
 
-        viewReports()
+        if(selection == 1):
+            query = pd.read_sql("SELECT * FROM salesVsExpen where salesVsExpen.month >  EXTRACT(month  FROM current_date - INTERVAL" + f"'{date} months')", conn)
+            query = query.astype({"year": int, "month": int})
+            
+            print(query)
+            print("\n#####################################\n")
+
+            viewReports()
 
 
-    if(selection == "2"):
-        query = pd.read_sql('SELECT * FROM salesPerAuthor', conn)
-        print(query)
-        print("\n#####################################\n")
+        if(selection == 2):
+            query = pd.read_sql("SELECT * FROM salesPerAuthor where salesPerAuthor.month >  EXTRACT(month  FROM current_date - INTERVAL" + f"'{date} months')", conn)
 
-        viewReports()
+            query = query.astype({"year": int, "month": int})
+            print(query)
+            print("\n#####################################\n")
+
+            viewReports()
         
     
-    if(selection == "3"):
-        query = pd.read_sql('SELECT * FROM salesPerGenre', conn)
-        print(query)
-        print("\n#####################################\n")
+        if(selection == 3):
+            query = pd.read_sql("SELECT * FROM salesPerGenre where salesPerGenre.month >  EXTRACT(month  FROM current_date - INTERVAL" + f"'{date} months')", conn)
 
-        viewReports()
+            query = query.astype({"year": int, "month": int})
+            print(query)
+            print("\n#####################################\n")
+
+            viewReports()
         
 
-    if(selection == "4"):
-        query = pd.read_sql('SELECT * FROM salesPerPublisher', conn)
-        print(query)
-        print("\n#####################################\n")
+        if(selection == 4):
+            query = pd.read_sql("SELECT * FROM salesPerPublisher where salesPerPublisher.month >  EXTRACT(month  FROM current_date - INTERVAL" + f"'{date} months')", conn)
 
+            query = query.astype({"year": int, "month": int})
+            print(query)
+            print("\n#####################################\n")
+
+            viewReports()
+
+        if(selection == 0):
+            owner_screen()
+            
+
+        
+
+
+        cur.close()
+        conn.close()
+
+
+    except:
+        print("\nWrong input type please try again with an integer!\n")
         viewReports()
 
-    if(selection == "0"):
-        owner_screen()
-        
+
+
+
 
     
 
-
-    cur.close()
-    conn.close()
 
 def viewOrders():
+    print("\n#####################################\n")
 
+    print("\n View Orders Page  \n")
     conn = psycopg2.connect(host="localhost", port = 8080, database="bookstore", user="postgres", password=90210)
     cur = conn.cursor()
 
     query = pd.read_sql('SELECT * FROM orders', conn)
     print(query)
 
+    print("\n Returning back to landing page!\n")
     owner_screen()
 
     cur.close()
     conn.close()
 
 
-# def sendMoney():
+def sendMoney():
+
+    print("\n#####################################\n")
+
+    print("\n Send Money to Publishers Page  \n")
+
+    conn = psycopg2.connect(host="localhost", port = 8080, database="bookstore", user="postgres", password=90210)
+    cur = conn.cursor()
+
+    print("Current Publisher list")
+    print("\n#####################################\n")
+
+    pubList = pd.read_sql('SELECT publisher_name FROM Publisher', conn)
+    print(pubList)
+    print("\n#####################################\n")
+
+    selection = input("Using the index on left hand side, please enter the index of the publisher you wish to send money to: ")
+    while selection not in ('0', '1', '2', '3') :
+        print("\nWrong input please try again!\n")
+        selection = input("Using the index on left hand side, please enter the index of the publisher you wish to send money to: ")
+
+    print("\n#####################################\n")
+
+
+    query = pd.read_sql("SELECT year, month, publisher_id, salesPerPublisher.publisher_name, total_profits FROM salesPerPublisher join Publisher on publisher.publisher_name = salesPerPublisher.publisher_name where salesPerPublisher.publisher_name = " + f"'{pubList.iloc[int(selection)]['publisher_name']}' ", conn)
+    print(query.astype({"year": int, "month": int}))
+    print("\n#####################################\n")
+
+    
+
+    try:
+
+        year, month = input("Which year and month's profits do you wish to send? (year,month) ").split(',')
+
+        print("Loading:")
+
+        #animation = ["10%", "20%", "30%", "40%", "50%", "60%", "70%", "80%", "90%", "100%"]
+        animation = ["[■□□□□□□□□□]","[■■□□□□□□□□]", "[■■■□□□□□□□]", "[■■■■□□□□□□]", "[■■■■■□□□□□]", "[■■■■■■□□□□]", "[■■■■■■■□□□]", "[■■■■■■■■□□]", "[■■■■■■■■■□]", "[■■■■■■■■■■]"]
+
+        for i in range(len(animation)):
+            time.sleep(0.2)
+            sys.stdout.write("\r" + animation[i % len(animation)])
+            sys.stdout.flush()
+
+        print("\n")
+
+        transfer = pd.read_sql("SELECT year, month, publisher_id, salesPerPublisher.publisher_name, total_profits, publisher_bankAccount FROM salesPerPublisher join Publisher on publisher.publisher_name = salesPerPublisher.publisher_name where salesPerPublisher.publisher_name = " + f"'{pubList.iloc[int(selection)]['publisher_name']}' and year = " +  f"'{year}' " + " and month = " + f"'{month}' ", conn)
+
+        if (transfer.empty):
+            raise Exception
+        transfer = transfer.astype({"year": int, "month": int, "publisher_bankaccount": int})
+        print(transfer)
+        print(f"\n Sent ${round(transfer.iloc[0]['total_profits'], 2)} to  {pubList.iloc[int(selection)]['publisher_name']}'s bank account no: {transfer.iloc[0]['publisher_bankaccount']}")
+        print("\n Returning back to landing page!")
+        print("\n#####################################\n")
+
+        return owner_screen()
+           
+
+    ## Checking if input for month and year is correct   
+    except:
+        print("\n Failed to enter correct values \n")
+
+        selection = input("\n Select 0 to try again from the beginning and 1 to go back to landing page: ")
+
+        if(selection == '0'):
+            sendMoney()
+        else:
+            owner_screen()
+
+
+    
+
+
+
+
+
+
+
+
+
 
 def owner_screen():
+    print("\n#####################################\n")
 
     cur.close()
     conn.close()
 
-    print("Welcome to the Owners dashboard, *Name*! \n")
+    print("Welcome to the Owners dashboard, LookInnaAdmin! \n")
     print("[1] View Current Inventory \n")
     print("[2] Add New Books \n")
     print("[3] Remove Books \n")
@@ -253,8 +394,8 @@ def owner_screen():
 
     selection = input("Please select an option (0-6): ")
 
-#     if(selection == "0"):
-#         logOut()
+    if(selection == "0"):
+        main()
 
     if(selection == "1"):
         viewInventory()
@@ -274,8 +415,8 @@ def owner_screen():
         viewOrders()
 
 
-#     if(selection == "6"):
-#         sendMoney()    
+    if(selection == "6"):
+        sendMoney()    
 
 # conn = psycopg2.connect("dbname=bookstore user=postgres password=abcd123")
 conn = psycopg2.connect(host="localhost", port = 8080, database="bookstore", user="postgres", password=90210)
@@ -588,10 +729,11 @@ def searchBook(userID, cart):
                 print("ERROR: Please enter a valid choice!!")
 
 def main():
+
     cart = []
 
     landing_page()
-    selection = input()
+    selection = input("Select an option:")
     print('selection is', selection)
     if(selection=='1'):
         loggedUser = user_login()
