@@ -1,4 +1,4 @@
--- Query
+t-- Query
 
 -- User - SearchByBook Title- 
 select isbn, name, author_firstname, author_lastname, genre, num_pages, rating, price, stock, format
@@ -53,7 +53,7 @@ insert into users (user_ID, user_name, user_email, user_phonenumber, user_passwo
 select street_number, street_name, city, prov, postal_code, country from users where user_id = {userID};
 
 -- User - Add order
-insert into orders (user_id, order_date, total_price, no_of_items, status_order) values ({userID},'{date}','{total}','1','Succefully Placed Order');
+insert into orders (user_id, order_date, total_price, no_of_items, status_order) values ({userID},curdate(),'{total}','1','Succefully Placed Order');
 
 -- User - Add address to Addresses
 insert into addresses (order_id, street_number, street_name, city, prov, postal_code, country) values ('{orderID}','{strNum}','{strName}','{city}','{prov}','{postal}','{country}');
@@ -85,7 +85,3 @@ DELETE FROM book WHERE ISBN = '';
 
 
 
-/* A new Order is placed by user */
-
-insert into inOrder values (order_id, ISBN); -- Dependant on how many books
-insert into buys values (order_id, user_id);

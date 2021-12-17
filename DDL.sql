@@ -148,6 +148,9 @@ create table addresses
         postal_code             varchar(7) not null, 
         country                 varchar(50) not null, 
 
-        primary key (address_id)
+        primary key (order_id, address_id),
+        foreign key (order_id) references orders   
+            on delete cascade
+
     );
     ALTER SEQUENCE addresses_address_id_seq RESTART WITH 9999 INCREMENT BY 1;

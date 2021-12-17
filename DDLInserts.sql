@@ -1,6 +1,5 @@
 delete from handles;
 delete from publishes;
--- delete from order_ISBN;
 delete from owners;
 delete from buys;
 delete from inOrder;
@@ -19,7 +18,7 @@ insert into users values (DEFAULT, 'Jessica', 'jessjess@hotmail.com', '321-123-0
 
 
 insert into publisher values ('CHP', 'Cedar House Publishers', 'contact@cedarhousepub.com', '407', 'Eastview Drive', 'Friday Harbor', 'Washington', '24572', 'USA', '434-929-8002', 0321000021);
-insert into publisher values ('SSC', 'Sound & Seas Co.,', 'contact@sound&seas.com', '123', 'Publisher Ave', 'Ottawa', 'Ontario', 'K19J7X', 'Canada', '613-123-5431', 2092944675);
+insert into publisher values ('SSC', 'Sound & Seas Co.', 'contact@sound&seas.com', '123', 'Publisher Ave', 'Ottawa', 'Ontario', 'K19J7X', 'Canada', '613-123-5431', 2092944675);
 insert into publisher values ('PP', 'Palimpsest Printing', 'contact@palimpsetprint.com', '432', 'welovesql street', 'Fremont', 'California', '93244', 'USA', '669-432-4325', 9432843295);
 insert into publisher values ('ESP', 'Etaoin Shrdlu Press', 'contact@etaoinshrdlu.com', '321', 'book street', 'Toronto', 'Ontario', 'M3C0C3', 'Canada', '416-234-7645', 6543644098);
 
@@ -58,32 +57,32 @@ insert into book values ('989-28-3705-633-3', 'It''s Never Just a Glass', 'Leona
 insert into book values ('989-28-79-14379-4', 'Quiddity and Quoddity', 'Jill', 'Hergesheimer', 'Young Adult', '373', '2', '11.99', '42', 'ESP', '2.0', 'Trade paperback');
 insert into book values ('989-28-79-03683-6', 'The Spark and The Ashe', 'Ursula', 'Karénine', 'Young Adult', '340', '4', '18.50', '35', 'ESP', '4.5', 'Hardcover');
 
-insert into orders values (DEFAULT,'10000','2193-01-02','11.00','1','Shipped');
-insert into orders values (DEFAULT,'10001','2193-01-02','26.00','1','Shipped');
-insert into orders values (DEFAULT,'10002','2193-01-02','32.00','1','Shipped');
-insert into orders values (DEFAULT,'10003','2193-01-02','25.00','1','Shipped');
-insert into orders values (DEFAULT,'10004','2193-01-02','35.00','1','Shipped');
-insert into orders values (DEFAULT,'10005','2193-01-02','11.50','1','Shipped');
-insert into orders values (DEFAULT,'10000','2193-01-02','23.50','1','Shipped');
-insert into orders values (DEFAULT,'10001','2193-01-02','22.00','1','Shipped');
-insert into orders values (DEFAULT,'10002','2193-01-02','14.00','1','Shipped');
-insert into orders values (DEFAULT,'10003','2193-01-02','20.50','1','Shipped');
-insert into orders values (DEFAULT,'10004','2193-02-01','23.50','1','Shipped');
-insert into orders values (DEFAULT,'10005','2193-02-01','26.00','1','Shipped');
-insert into orders values (DEFAULT,'10000','2193-02-01','18.00','1','Shipped');
-insert into orders values (DEFAULT,'10001','2193-02-01','11.50','1','Shipped');
-insert into orders values (DEFAULT,'10002','2193-02-01','11.50','1','Shipped');
-insert into orders values (DEFAULT,'10003','2193-02-01','11.50','1','Shipped');
-insert into orders values (DEFAULT,'10004','2193-02-01','11.50','1','Shipped');
-insert into orders values (DEFAULT,'10005','2193-02-01','11.50','1','Shipped');
-insert into orders values (DEFAULT,'10000','2193-02-01','25.00','1','Shipped');
-insert into orders values (DEFAULT,'10001','2193-02-01','11.50','1','Shipped');
-insert into orders values (DEFAULT,'10002','2193-03-01','32.00','1','Pending Shipment');
-insert into orders values (DEFAULT,'10003','2193-03-01','9.00','1','Pending Shipment');
-insert into orders values (DEFAULT,'10004','2193-03-01','9.00','1','Pending Shipment');
-insert into orders values (DEFAULT,'10005','2193-03-01','13.00','1','Pending Shipment');
-insert into orders values (DEFAULT,'10002','2193-03-01','32.00','1','Pending Shipment');
-insert into orders values (DEFAULT,'10004','2193-03-01','11.00','1','Pending Shipment');
+insert into orders values (DEFAULT,'10000','2021-10-02','11.00','1','Shipped');
+insert into orders values (DEFAULT,'10001','2021-10-02','26.00','1','Shipped');
+insert into orders values (DEFAULT,'10002','2021-10-02','32.00','1','Shipped');
+insert into orders values (DEFAULT,'10003','2021-10-02','25.00','1','Shipped');
+insert into orders values (DEFAULT,'10004','2021-10-02','35.00','1','Shipped');
+insert into orders values (DEFAULT,'10005','2021-10-02','11.50','1','Shipped');
+insert into orders values (DEFAULT,'10000','2021-10-02','23.50','1','Shipped');
+insert into orders values (DEFAULT,'10001','2021-10-02','22.00','1','Shipped');
+insert into orders values (DEFAULT,'10002','2021-10-02','14.00','1','Shipped');
+insert into orders values (DEFAULT,'10003','2021-10-02','20.50','1','Shipped');
+insert into orders values (DEFAULT,'10004','2021-11-01','23.50','1','Shipped');
+insert into orders values (DEFAULT,'10005','2021-11-01','26.00','1','Shipped');
+insert into orders values (DEFAULT,'10000','2021-11-01','18.00','1','Shipped');
+insert into orders values (DEFAULT,'10001','2021-11-01','11.50','1','Shipped');
+insert into orders values (DEFAULT,'10002','2021-11-01','11.50','1','Shipped');
+insert into orders values (DEFAULT,'10003','2021-11-01','11.50','1','Shipped');
+insert into orders values (DEFAULT,'10004','2021-11-01','11.50','1','Shipped');
+insert into orders values (DEFAULT,'10005','2021-11-01','11.50','1','Shipped');
+insert into orders values (DEFAULT,'10000','2021-11-01','25.00','1','Shipped');
+insert into orders values (DEFAULT,'10001','2021-11-01','11.50','1','Shipped');
+insert into orders values (DEFAULT,'10002','2021-12-01','32.00','1','Pending Shipment');
+insert into orders values (DEFAULT,'10003','2021-12-01','9.00','1','Pending Shipment');
+insert into orders values (DEFAULT,'10004','2021-12-01','9.00','1','Pending Shipment');
+insert into orders values (DEFAULT,'10005','2021-12-01','13.00','1','Pending Shipment');
+insert into orders values (DEFAULT,'10002','2021-12-01','32.00','1','Pending Shipment');
+insert into orders values (DEFAULT,'10004','2021-12-01','11.00','1','Pending Shipment');
 
 
 insert into inOrder values('107021','989-28-3705-987-7');
@@ -235,7 +234,7 @@ insert into addresses values ('107046',DEFAULT,'5','Science St','Montreal','Queb
 /* Materialized View for Sales vs Expenditure Report */
 
 CREATE MATERIALIZED VIEW salesVsExpen AS
-SELECT EXTRACT(YEAR  FROM order_date) as Year, EXTRACT(MONTH  FROM order_date) as Month, SUM(total_price) AS Sales, 500 as expenditure
+SELECT EXTRACT(YEAR  FROM order_date) as Year, EXTRACT(MONTH  FROM order_date) as Month, SUM(total_price) AS Sales, 500 as expenditure, (SUM(total_price) - 500) As Net_Profits
     FROM Orders
 GROUP BY month, year
 ORDER BY month;
@@ -243,25 +242,37 @@ ORDER BY month;
 
 /* Materialized View for Sales per Author Report */
 CREATE MATERIALIZED VIEW salesPerAuthor AS
-Select author_firstname, author_lastname, SUM(price) as sales
-From book LEFT JOIN inOrder on book.ISBN = inOrder.ISBN
-Group by author_firstname, author_lastname;
+Select EXTRACT(YEAR  FROM order_date) as Year, EXTRACT(MONTH  FROM order_date) as Month, author_firstname, author_lastname, SUM(price) as sales
+From book JOIN inOrder on book.ISBN = inOrder.ISBN
+		  JOIN Orders on Orders.order_id = inOrder.order_id
+Group by month, year, author_firstname, author_lastname
+ORDER BY month;
 
 
 /* Materialized View for Sales per Genre Report */
 CREATE MATERIALIZED VIEW salesPerGenre AS
-Select genre, SUM(price) as sales
-From book LEFT JOIN inOrder on book.ISBN = inOrder.ISBN
-Group by genre;
+Select EXTRACT(YEAR  FROM order_date) as Year, EXTRACT(MONTH  FROM order_date) as Month, genre, SUM(price) as sales
+From book RIGHT JOIN inOrder on book.ISBN = inOrder.ISBN
+          JOIN Orders on Orders.order_id = inOrder.order_id
+Group by month, year, genre
+ORDER BY month;
 
 
 /* Materialized View for Sales per Publisher Report */
 CREATE MATERIALIZED VIEW salesPerPublisher AS
-Select publisher_name as Publisher_Name, SUM((publisher_percent/100) * price) as Total_Profits
-From book LEFT JOIN inOrder on book.ISBN = inOrder.ISBN
+Select EXTRACT(YEAR  FROM order_date) as Year, EXTRACT(MONTH  FROM order_date) as Month, publisher_name as Publisher_Name, Round(SUM((publisher_percent/100) * price), 3) as Total_Profits
+From book JOIN inOrder on book.ISBN = inOrder.ISBN
+		  JOIN Orders on Orders.order_id = inOrder.order_id
 		  RIGHT JOIN publisher on publisher.publisher_id = book.publisher_id
 		  
-Group By publisher_name;
+Group By month, year, publisher_name
+ORDER BY month;
+
+
+
+
+
+
 
 
 
