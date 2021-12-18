@@ -268,6 +268,14 @@ From book JOIN inOrder on book.ISBN = inOrder.ISBN
 Group By month, year, publisher_name
 ORDER BY month;
 
+/* Materialized View that keeps track of the count of books sold per month and year */
+CREATE MATERIALIZED VIEW booksSold AS
+Select EXTRACT(YEAR  FROM order_date) as Year, EXTRACT(MONTH  FROM order_date) as Month, book.isbn, count(book.isbn) 
+From book LEFT JOIN inOrder on book.ISBN = inOrder.ISBN
+		  JOIN Orders on Orders.order_id = inOrder.order_id
+Group by month, year, book.isbn
+ORDER BY month;
+
 
 
 

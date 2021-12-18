@@ -83,5 +83,3 @@ insert into book values (ISBN, name, author_firstname, author_lastname, genre, n
 DELETE FROM book WHERE ISBN = '';
 
 
-
-

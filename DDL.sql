@@ -2,7 +2,7 @@ create table users
     (
         user_ID			SERIAL UNIQUE, 
         user_name			varchar(20) not null, 
-        user_email			varchar(40) not null,
+        user_email			varchar(40) not null UNIQUE,
         user_phonenumber			varchar(15),
         user_password			varchar(20) not null,
         street_number       varchar(35) not null, 
