@@ -1,20 +1,35 @@
-DROP TRIGGER stock_reducer IF EXISTS on inOrder;
-DROP FUNCTION stock_reducer_func();
+--DROP TRIGGER stock_reducer on inOrder;
+--DROP TRIGGER stockCheck on inOrder;
+--DROP FUNCTION stock_check_func();
+--DROP FUNCTION stock_reducer_func();
 
 
 
 
 
--- Trigger
--- Running low on book
-create trigger orderMoreBooks after update of book on stock
-referencing new row as nrow
-referencing old row as orow
-for each row
-when nrow >= 4
-begin atomic
-	update book
-	set
+/* Trigger that checks if stock of book is above threshold */
+create TRIGGER stockCheck after insert on inOrder
+FOR EACH ROW
+EXECUTE PROCEDURE stock_check_func();
+
+
+
+CREATE OR REPLACE FUNCTION stock_check_func()
+  RETURNS trigger AS 
+$$
+BEGIN
+    REFRESH MATERIALIZED VIEW  booksSold;
+	IF NEW.ISBN in (SELECT isbn from book where stock < 10) then
+		UPDATE book
+		SET stock = stock + booksSold.count
+		FROM booksSold, orders
+		WHERE book.ISBN = NEW.ISBN and new.order_id = orders.order_id and booksSold.month =  EXTRACT(month  FROM orders.order_date - INTERVAL  '1 months') and booksSold.year = EXTRACT(year  FROM orders.order_date);
+	END IF;
+RETURN NEW;
+END;
+$$
+
+LANGUAGE 'plpgsql';
 
 
 

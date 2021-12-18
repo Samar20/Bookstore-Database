@@ -206,18 +206,21 @@ def viewReports():
 
         if(selection != 0 ):
             date = input("Please enter the time period of the report you wish to view (past month: 1, past two months: 2, past year: 12): ")
+            #Error checking for correct month value
+            if(int(date) < 0):
+                raise Exception
             if(date == "12"):
                 date = "11"
 
 
-        #Error checking for correct month value
-        if(int(date) < 0):
-            raise Exception
+        
 
 
         print("\n#####################################\n")
 
         if(selection == 1):
+            # cur.execute("""REFRESH MATERIALIZED VIEW  salesVsExpen""")
+            # conn.commit()
             query = pd.read_sql("SELECT * FROM salesVsExpen where salesVsExpen.month >  EXTRACT(month  FROM current_date - INTERVAL" + f"'{date} months')", conn)
             query = query.astype({"year": int, "month": int})
             
@@ -228,6 +231,8 @@ def viewReports():
 
 
         if(selection == 2):
+            # cur.execute("""REFRESH MATERIALIZED VIEW  salesPerAuthor""")
+            # conn.commit()
             query = pd.read_sql("SELECT * FROM salesPerAuthor where salesPerAuthor.month >  EXTRACT(month  FROM current_date - INTERVAL" + f"'{date} months')", conn)
 
             query = query.astype({"year": int, "month": int})
@@ -238,6 +243,8 @@ def viewReports():
         
     
         if(selection == 3):
+            # cur.execute("""REFRESH MATERIALIZED VIEW  salesPerGenre""")
+            # conn.commit()
             query = pd.read_sql("SELECT * FROM salesPerGenre where salesPerGenre.month >  EXTRACT(month  FROM current_date - INTERVAL" + f"'{date} months')", conn)
 
             query = query.astype({"year": int, "month": int})
@@ -248,6 +255,8 @@ def viewReports():
         
 
         if(selection == 4):
+            # cur.execute("""REFRESH MATERIALIZED VIEW  salesPerPublisher""")
+            # conn.commit()
             query = pd.read_sql("SELECT * FROM salesPerPublisher where salesPerPublisher.month >  EXTRACT(month  FROM current_date - INTERVAL" + f"'{date} months')", conn)
 
             query = query.astype({"year": int, "month": int})
@@ -317,6 +326,9 @@ def sendMoney():
         selection = input("Using the index on left hand side, please enter the index of the publisher you wish to send money to: ")
 
     print("\n#####################################\n")
+
+    # cur.execute("""REFRESH MATERIALIZED VIEW  salesPerPublisher""")
+    # conn.commit()
 
 
     query = pd.read_sql("SELECT year, month, publisher_id, salesPerPublisher.publisher_name, total_profits FROM salesPerPublisher join Publisher on publisher.publisher_name = salesPerPublisher.publisher_name where salesPerPublisher.publisher_name = " + f"'{pubList.iloc[int(selection)]['publisher_name']}' ", conn)
@@ -392,31 +404,44 @@ def owner_screen():
     print("[6] Send Money to Publishers \n")
     print("[0] Log Out \n")
 
+    
     selection = input("Please select an option (0-6): ")
 
-    if(selection == "0"):
-        main()
 
-    if(selection == "1"):
-        viewInventory()
+
+        
     
-    if(selection == "2"):
+
+    if(selection == "0"):
+        print("\n Thank you LookInnaAdmin, Hope you had a nice visit \n")
+            
+            
+
+    elif(selection == "1"):
+        viewInventory()
+        
+    elif(selection == "2"):
         addNewBooks()
 
-    if(selection == "3"):
+    elif(selection == "3"):
         removeBooks()
 
 
-    if(selection == "4"):
+    elif(selection == "4"):
         viewReports()
 
 
-    if(selection == "5"):
+    elif(selection == "5"):
         viewOrders()
 
 
-    if(selection == "6"):
-        sendMoney()    
+    elif(selection == "6"):
+        sendMoney()
+
+    else:
+        print("\nWrong input please try again!\n")
+        owner_screen()
+        
 
 # conn = psycopg2.connect("dbname=bookstore user=postgres password=abcd123")
 conn = psycopg2.connect(host="localhost", port = 8080, database="bookstore", user="postgres", password=90210)
@@ -507,20 +532,34 @@ def create_account():
     postal_code = input("Postal Code: ")
     country = input("Country: ")
 
-    SQL = "insert into users (user_name, user_email, user_phonenumber, user_password, street_number, street_name, city, prov, postal_code, country, member_years) values ('{name}', '{user_email}', '{user_phonenumber}', '{user_password}', '{street_number}', '{street_name}', '{city}', '{prov}', '{postal_code}', '{country}', 0);".format(name=name, user_email=user_email, user_phonenumber=user_phonenumber, user_password=user_password, street_number=street_number, street_name=street_name, city=city, prov=prov, postal_code=postal_code, country=country)
-    cur.execute(SQL)
-    conn.commit()
+    ## ADD ERROR CHECK FOR UNIQUE EMAIL ID 
+    try:
+        SQL = "insert into users (user_name, user_email, user_phonenumber, user_password, street_number, street_name, city, prov, postal_code, country, member_years) values ('{name}', '{user_email}', '{user_phonenumber}', '{user_password}', '{street_number}', '{street_name}', '{city}', '{prov}', '{postal_code}', '{country}', 0);".format(name=name, user_email=user_email, user_phonenumber=user_phonenumber, user_password=user_password, street_number=street_number, street_name=street_name, city=city, prov=prov, postal_code=postal_code, country=country)
+        cur.execute(SQL)
+        conn.commit()
 
-    SQL = "SELECT user_ID FROM users WHERE user_email = '{uname}' AND user_password = '{psswrd}';".format(uname=user_email, psswrd=user_password)
-    cur.execute(SQL)
-    userID = cur.fetchone()
+        SQL = "SELECT user_ID FROM users WHERE user_email = '{uname}' AND user_password = '{psswrd}';".format(uname=user_email, psswrd=user_password)
+        cur.execute(SQL)
+        userID = cur.fetchone()
 
-    if(userID == None):
-        print("Error with either username or password.")
-    else:
-        print("Successfully created an account! Logged in as", user_email, 'with ID', userID)
-        userID = str(userID[0])
-        return userID
+        if(userID == None):
+            print("Error with either username or password.")
+        else:
+            print("Successfully created an account! Logged in as", user_email, 'with ID', userID)
+            userID = str(userID[0])
+            return userID
+
+
+    except:
+        print("Oh no! That email already has an account, maybe reset your password (when that functionality is allowed) or use another email :/ \n")
+        selection = input("Please enter 0 to try again or any other key to go back!: ")
+
+        if(selection == "0"):
+            create_account()
+        else:
+            main()
+
+
 
 def bookCatalogue(userID, cart):
     print("\n#####################################\n")
@@ -729,7 +768,6 @@ def searchBook(userID, cart):
                 print("ERROR: Please enter a valid choice!!")
 
 def main():
-
     cart = []
 
     landing_page()
