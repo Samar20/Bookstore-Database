@@ -8,13 +8,28 @@ import pandas as pd
 import time
 import sys
 
+###################################################################################
+
+# Enter DB login info after inserting DDL
+
+# conn = psycopg2.connect(host="localhost", port = 8080, database="bookstore", user="postgres", password=90210)
+conn = psycopg2.connect("dbname=bookstore user=postgres password=abcd123")
+
+cur = conn.cursor()
+pd.set_option("display.max_rows", None, "display.max_columns", None)
+pd.set_option('expand_frame_repr', False)
+
+###################################################################################
+
 def viewInventory():
 
     print("\n#####################################\n")
     print("\n View Inventory Page  \n")
 
-    conn = psycopg2.connect(host="localhost", port = 8080, database="bookstore", user="postgres", password=90210)
-    cur = conn.cursor()
+    # Add login creds here
+    # conn = psycopg2.connect(host="localhost", port = 8080, database="bookstore", user="postgres", password=90210)
+    # conn = psycopg2.connect("dbname=bookstore user=postgres password=abcd123")
+    # cur = conn.cursor()
 
     print("[1] Number of different types of books \n")
     print("[2] Total stock in warehouse \n")
@@ -65,14 +80,13 @@ def viewInventory():
     if(selection == 0):
         owner_screen()
 
-
-
 def addNewBooks():
     print("\n#####################################\n")
     print("\n Adding a New Book Page  \n")
 
-    conn = psycopg2.connect(host="localhost", port = 8080, database="bookstore", user="postgres", password=90210)
-    cur = conn.cursor()
+    # conn = psycopg2.connect(host="localhost", port = 8080, database="bookstore", user="postgres", password=90210)
+    # conn = psycopg2.connect("dbname=bookstore user=postgres password=abcd123")
+    # cur = conn.cursor()
 
     isbn = input("Please enter the ISBN of the book: ")
     name = input("Please enter the Title of the book: ")
@@ -111,31 +125,20 @@ def addNewBooks():
             else:
                 owner_screen()
 
-
-
     else:
         print("\nThis publisher is not authorised to sell \nCannot add book, returning back to landing page!\n")
         owner_screen()
 
-    
-
-
-    
-
-    cur.close()
-    conn.close()
-
-
-
-    
+    # cur.close()
+    # conn.close()
 
 
 def removeBooks():
     print("\n#####################################\n")
     print("\n ** Removing a Book Page **  \n")
 
-    conn = psycopg2.connect(host="localhost", port = 8080, database="bookstore", user="postgres", password=90210)
-    cur = conn.cursor()
+    # conn = psycopg2.connect(host="localhost", port = 8080, database="bookstore", user="postgres", password=90210)
+    # cur = conn.cursor()
 
     isbn = input("\n Please enter the ISBN of the book to be cleared from the warehouse or 0 to exit to landing page: ")
 
@@ -165,28 +168,19 @@ def removeBooks():
             else:
                 owner_screen()
         
-    
     else:
         print("\n This book does not exist in current inventory \n Please try again!\n")
         removeBooks()
 
-        
-                
-
-    cur.close()
-    conn.close()
-
-        
-
-
-
-
+    # cur.close()
+    # conn.close()
 
 
 def viewReports():
     print("\n#####################################\n")
-    conn = psycopg2.connect(host="localhost", port = 8080, database="bookstore", user="postgres", password=90210)
-    cur = conn.cursor()
+    # conn = psycopg2.connect(host="localhost", port = 8080, database="bookstore", user="postgres", password=90210)
+    # conn = psycopg2.connect("dbname=bookstore user=postgres password=abcd123")
+    # cur = conn.cursor()
 
     print("\n View Reports Page  \n")
 
@@ -211,10 +205,6 @@ def viewReports():
                 raise Exception
             if(date == "12"):
                 date = "11"
-
-
-        
-
 
         print("\n#####################################\n")
 
@@ -268,12 +258,8 @@ def viewReports():
         if(selection == 0):
             owner_screen()
             
-
-        
-
-
-        cur.close()
-        conn.close()
+        # cur.close()
+        # conn.close()
 
 
     except:
@@ -281,27 +267,37 @@ def viewReports():
         viewReports()
 
 
-
-
-
-    
-
-
 def viewOrders():
+
     print("\n#####################################\n")
 
     print("\n View Orders Page  \n")
-    conn = psycopg2.connect(host="localhost", port = 8080, database="bookstore", user="postgres", password=90210)
-    cur = conn.cursor()
 
-    query = pd.read_sql('SELECT * FROM orders', conn)
+    SQL = "SELECT * FROM orders"
+    cur.execute(SQL)
+    query = pd.DataFrame(cur.fetchall())
+    query.columns=[ x.name for x in cur.description ]
     print(query)
 
-    print("\n Returning back to landing page!\n")
-    owner_screen()
+    flag = True
 
-    cur.close()
-    conn.close()
+    while(flag):
+        orderID = input("\nTo update the shipping status please enter the orderID or press 0 to go back to menu: ")
+
+        if(orderID == '0'):
+            owner_screen()
+            flag = False
+        
+        if(query.isin([int(orderID)]).any().any()):
+
+            status = input("Enter the updated shipping status (Pending, Delayed, Shipped): ")
+
+            SQL = "UPDATE orders SET status_order = '{stat}' WHERE order_id = {id};".format(stat=status, id=orderID)
+            cur.execute(SQL)
+            conn.commit()
+                
+        else:
+            print("\nERROR: Please enter a valid orderID!!")
 
 
 def sendMoney():
@@ -310,8 +306,9 @@ def sendMoney():
 
     print("\n Send Money to Publishers Page  \n")
 
-    conn = psycopg2.connect(host="localhost", port = 8080, database="bookstore", user="postgres", password=90210)
-    cur = conn.cursor()
+    # conn = psycopg2.connect(host="localhost", port = 8080, database="bookstore", user="postgres", password=90210)
+    # conn = psycopg2.connect("dbname=bookstore user=postgres password=abcd123")
+    # cur = conn.cursor()
 
     print("Current Publisher list")
     print("\n#####################################\n")
@@ -330,12 +327,9 @@ def sendMoney():
     # cur.execute("""REFRESH MATERIALIZED VIEW  salesPerPublisher""")
     # conn.commit()
 
-
     query = pd.read_sql("SELECT year, month, publisher_id, salesPerPublisher.publisher_name, total_profits FROM salesPerPublisher join Publisher on publisher.publisher_name = salesPerPublisher.publisher_name where salesPerPublisher.publisher_name = " + f"'{pubList.iloc[int(selection)]['publisher_name']}' ", conn)
     print(query.astype({"year": int, "month": int}))
     print("\n#####################################\n")
-
-    
 
     try:
 
@@ -378,23 +372,9 @@ def sendMoney():
             owner_screen()
 
 
-    
-
-
-
-
-
-
-
-
-
 
 def owner_screen():
     print("\n#####################################\n")
-
-    cur.close()
-    conn.close()
-
     print("Welcome to the Owners dashboard, LookInnaAdmin! \n")
     print("[1] View Current Inventory \n")
     print("[2] Add New Books \n")
@@ -407,16 +387,11 @@ def owner_screen():
     
     selection = input("Please select an option (0-6): ")
 
-
-
-        
-    
-
     if(selection == "0"):
         print("\n Thank you LookInnaAdmin, Hope you had a nice visit \n")
-            
-            
-
+        cur.close()
+        conn.close()
+        
     elif(selection == "1"):
         viewInventory()
         
@@ -441,30 +416,6 @@ def owner_screen():
     else:
         print("\nWrong input please try again!\n")
         owner_screen()
-        
-
-# conn = psycopg2.connect("dbname=bookstore user=postgres password=abcd123")
-conn = psycopg2.connect(host="localhost", port = 8080, database="bookstore", user="postgres", password=90210)
-
-cur = conn.cursor()
-pd.set_option("display.max_rows", None, "display.max_columns", None)
-pd.set_option('expand_frame_repr', False)
-
-# cur.execute(open("DDL.sql", "r").read())
-# cur.execute(open("DDLInserts.sql", "r").read())
-# cur.execute("SELECT * FROM test;")
-# cur.fetchone()
-# conn.commit() # Make the changes to the database persistent
-# cur.execute("SELECT * FROM users;")
-# df = pd.DataFrame(cur.fetchall())
-# df.columns=[ x.name for x in cur.description ]
-# print(df)
-# Close communication with the database
-# cur.close()
-# conn.close()
-
-# cur.execute(open("DDL.sql", "r").read())
-# cur.execute(open("DDLInserts.sql", "r").read())
 
 def landing_page():
     print("\n#####################################\n")
@@ -475,8 +426,7 @@ def landing_page():
     print("#####################################\n")
 
 def user_login():
-    print("\n#####################################\n")
-    print("User Login Page")
+    print("\n\nUser Login Page")
     username = input("Please enter your username (email): ")
     password = input("Please enter your password: ")
     # cur.execute("Select * from users")
@@ -549,7 +499,6 @@ def create_account():
             userID = str(userID[0])
             return userID
 
-
     except:
         print("Oh no! That email already has an account, maybe reset your password (when that functionality is allowed) or use another email :/ \n")
         selection = input("Please enter 0 to try again or any other key to go back!: ")
@@ -566,6 +515,7 @@ def bookCatalogue(userID, cart):
     print("Hello", userID, "Welcome to the bookstore!\n")
     print("[1] Search for book (by Title, ISBN, Author, Genre, Rating)")
     print("[2] View Cart")
+    print('[Q] to quit and log out')
     selection = input()
     if (selection == '1'):
         searchBook(userID, cart)
@@ -579,22 +529,30 @@ def bookCatalogue(userID, cart):
         elif(selection == '2'):
             bookCatalogue(userID, cart)
         else:
-            print("Error! (FIX THIS)")
+            print("\nERROR! Please enter a valid choice (value between 1-2)")
+            bookCatalogue(userID, cart)
+    if (selection == 'q' or selection == 'Q'):
+        print("***** Thank you for choosing Look Inna Bookstore. Have a great day! *****")
+        cur.close()
+        conn.close()
+        exit(-1)
+       
+
+    else:
+            print("\nERROR! Please enter a valid choice (value between 1-3)")
+            bookCatalogue(userID, cart)
 
 def viewCart(userID, cart):
     
     cartList = []
     df_cart = pd.DataFrame(cartList)
     if not cart:
-        print("Cart is empty")
+        print("\n*** Cart is empty!! ***")
         bookCatalogue(userID, cart)
     for book in cart:
         SQL = "select isbn, name, author_firstname, author_lastname, genre, num_pages, rating, price, stock, format from book where ISBN = '{isbn}';".format(isbn=book)
         cur.execute(SQL)
-        # print(cur.fetchall())
-        # cartList.append(cur.fetchall())
         df_cart = df_cart.append(cur.fetchall())
-    # df_cart = pd.DataFrame(cartList)
     df_cart.columns=['ISBN', 'Title', 'Author FirstName', 'Author LastName', 'Genre', 'Pages', 'Rating', 'Price', 'Stock', 'Format']
     print(df_cart)
 
@@ -606,36 +564,42 @@ def checkout(userID, cart, df_cart):
     print("Checkout")
     viewCart(userID, cart)
     print("\n#####################################\n")
-    print("userid is: " + userID)
     SQL = "select street_number, street_name, city, prov, postal_code, country from users where user_id = {userID};".format(userID=userID)
-    print(SQL)
+    
     cur.execute(SQL)
     adrs = cur.fetchone()
     address = adrs[0] + " " + adrs[1] + " " + adrs[2] + " " + adrs[3] + " " + adrs[4] + " " + adrs[5]
-    print("[1] Ship order to address on file: ", address)
+    print("\n[1] Ship order to address on file: ", address)
     print("[2] Ship to new address")
     selection = input()
-    
-    orderID = createOrder(userID, df_cart, selection)
+    if(selection == '1'):
+        orderID = createOrder(userID, df_cart, selection, True)
     if(selection == '2'):
-        shipping(userID)
+        orderID = createOrder(userID, df_cart, selection, False)
+        shipping(userID, orderID)
 
-def shipping(userID):
-    SQL = "select order_id from orders where user_id = {userID}".format(userID=userID)
-    cur.execute(SQL)
-    orderID = cur.fetchone()
-    orderID = str(orderID[0])
-
+def shipping(userID, orderID):
     street_number = input("Street Number: ")
     street_name = input("Street Name (Ex. Main St): ")
     city = input("City: ")
     prov = input("Province: ")
     postal_code = input("Postal Code: ") 
     country = input("Country: ")  
-    SQL = "insert into addresses (order_id, street_number, street_name, city, prov, postal_code, country) values ('{orderID}','{strNum}','{strName}','{city}','{prov}','{postal}','{country}');".format(orderID=orderID, strNum=strNum, strName=strName, city=cityy, prov=provv, postal=pc, country=cntry)
+    SQL = "insert into addresses (order_id, street_number, street_name, city, prov, postal_code, country) values ('{orderID}','{strNum}','{strName}','{city}','{prov}','{postal}','{country}');".format(orderID=orderID, strNum=street_number, strName=street_name, city=city, prov=prov, postal=postal_code, country=country)
     cur.execute(SQL)
+    conn.commit()
 
-def createOrder(userID, df_cart, selection):
+    print("\nOrder Successfully Placed!")
+    print("******", orderID, "is your Tracking Number ******")
+
+    print("\nPress any key to quit and log out")
+    selection = input()
+    cur.close()
+    conn.close()
+    exit(-1)
+
+
+def createOrder(userID, df_cart, selection, flag):
     dateSQL = "SELECT CURRENT_DATE;"
     cur.execute(dateSQL)
     date = cur.fetchone()
@@ -666,18 +630,21 @@ def createOrder(userID, df_cart, selection):
         SQL = "insert into addresses (order_id, street_number, street_name, city, prov, postal_code, country) values ('{orderID}','{strNum}','{strName}','{city}','{prov}','{postal}','{country}');".format(orderID=orderID, strNum=strNum, strName=strName, city=cityy, prov=provv, postal=pc, country=cntry)
         cur.execute(SQL)
         conn.commit()
+        
+    if(flag):
+        print("\nOrder Successfully Placed!")
+        print("******", orderID, "is your Tracking Number ******")
 
-    print("Order Successfully Placed!")
-    print(orderID, "is your Tracking Number")
+        print("\n\n[1] Main Menu")
+        print("Press any key to quit and log out")
 
-    print("\n\n[1] Main Menu")
-    print("Press any key to quit and log out")
-
-    selection = input()
-    if (selection=="1"):
-        landing_page()
-    else:
-        exit(-1)
+        selection = input()
+        if (selection=="1"):
+            landing_page()
+        else:
+            cur.close()
+            conn.close()
+            exit(-1)
     return orderID
 
 def searchBook(userID, cart):
@@ -689,62 +656,154 @@ def searchBook(userID, cart):
     print("[4] Genre")
     print("[5] Rating (Show ONLY one rating)")
     print("[6] Rating (Show ratings >= input)")
+    print("\n[0] Go back to main menu")    
     selection = input()
     if (selection == '1'):
         titleSearch = input("Please enter title (Case sensitive): ")
-        SQL = "select isbn, name, author_firstname, author_lastname, genre, num_pages, rating, price, stock, format from book where name = '{name}';".format(name=titleSearch)
+
+        SQL = "SELECT name FROM book;"
         cur.execute(SQL)
-        df_search = pd.DataFrame(cur.fetchall())
-        df_search.columns=[ x.name for x in cur.description ]
-        print(df_search)
+        df_title = pd.DataFrame(cur.fetchall())
+        df_title.columns=["title"]
+
+        if(df_title.isin([titleSearch]).any().any()):
+            SQL = "select isbn, name, author_firstname, author_lastname, genre, num_pages, rating, price, stock, format from book where name LIKE '%{name}%';".format(name=titleSearch)
+            cur.execute(SQL)
+            df_search = pd.DataFrame(cur.fetchall())
+            df_search.columns=[ x.name for x in cur.description ]
+            print("\n####################################")
+            print(df_search)
+            print("\n####################################")
+        else:
+            print("\n########## ERROR ##########")
+            print("Your Title is not in our bookstore database (yet)! Please try another search.\n")
+            searchBook(userID, cart)
 
     elif (selection == '2'):
-        isbnSearch = input("Please enter ISBN: ")
-        SQL = "select isbn, name, author_firstname, author_lastname, genre, num_pages, rating, price, stock, format from book where ISBN = '{isbn}';".format(isbn=isbnSearch)
+        isbnSearch = input("Please enter ISBN (ex. 989-28-3705-987-7): ")
+
+        SQL = "SELECT ISBN FROM book;"
         cur.execute(SQL)
-        df_search = pd.DataFrame(cur.fetchall())
-        df_search.columns=[ x.name for x in cur.description ]
-        print(df_search)
+        df_isbn = pd.DataFrame(cur.fetchall())
+        df_isbn.columns=["isbn"]
+
+        if(df_isbn.isin([isbnSearch]).any().any()):
+                SQL = "select isbn, name, author_firstname, author_lastname, genre, num_pages, rating, price, stock, format from book where ISBN = '{isbn}';".format(isbn=isbnSearch)
+                cur.execute(SQL)
+                df_search = pd.DataFrame(cur.fetchall())
+                df_search.columns=[ x.name for x in cur.description ]
+                print("\n####################################")
+                print(df_search)
+                print("\n####################################")
+
+        else:
+            print("\n########## ERROR ##########")
+            print("Your ISBN is not in our bookstore database (yet)! Please try another search.\n")
+            searchBook(userID, cart)
 
     elif (selection == '3'):
-        authorFirstSearch = input("Please enter Author's Name (first and last)' ")
-        first, last = authorFirstSearch.split(" ")
-        SQL = "select isbn, name, author_firstname, author_lastname, genre, num_pages, rating, price, stock, format from book where author_firstname = '{firstname}' and author_lastname = '{lastname}' group by isbn, author_lastname;".format(firstname=first, lastname=last)
-        cur.execute(SQL)
-        df_search = pd.DataFrame(cur.fetchall())
-        df_search.columns=[ x.name for x in cur.description ]
-        print(df_search)
+        authorFirstSearch = input("Please enter Author's Name: ")
+        if(" " not in authorFirstSearch):
+            # Case where user wants to search by authors first OR last name only
+            SQL = "SELECT author_firstname, author_lastname FROM book"
+            cur.execute(SQL)
+            df_auth = pd.DataFrame(cur.fetchall())
+            df_auth.columns=["firstname", "lastname"]
+
+            if(df_auth.isin([authorFirstSearch]).any().any()):
+                    SQL = "select isbn, name, author_firstname, author_lastname, genre, num_pages, rating, price, stock, format from book where author_firstname like '%{firstname}%' or author_lastname like '%{lastname}%' group by isbn, author_lastname;".format(firstname=authorFirstSearch, lastname=authorFirstSearch)
+                    cur.execute(SQL)
+                    df_search = pd.DataFrame(cur.fetchall())
+                    df_search.columns=[ x.name for x in cur.description ]
+                    print("\n####################################")
+                    print(df_search)
+                    print("\n####################################")
+
+            else:
+                print("\n########## ERROR ##########")
+                print("Your Author is not in our bookstore database (yet)! Please try another search.\n")
+                searchBook(userID, cart)
+        else:
+            # Case where user enters BOTH first and last name
+            first, last = authorFirstSearch.split(" ")
+            
+            SQL = "SELECT author_firstname, author_lastname FROM book"
+            cur.execute(SQL)
+            df_auth = pd.DataFrame(cur.fetchall())
+            df_auth.columns=["firstname", "lastname"]
+
+            if(((df_auth['firstname'] == first) & (df_auth['lastname'] == last)).any()):
+                    SQL = "select isbn, name, author_firstname, author_lastname, genre, num_pages, rating, price, stock, format from book where author_firstname = '{firstname}' and author_lastname = '{lastname}' group by isbn, author_lastname;".format(firstname=first, lastname=last)
+                    cur.execute(SQL)
+                    df_search = pd.DataFrame(cur.fetchall())
+                    df_search.columns=[ x.name for x in cur.description ]
+                    print("\n####################################")
+                    print(df_search)
+                    print("\n####################################")
+
+            else:
+                print("\n########## ERROR ##########")
+                print("Your Author is not in our bookstore database (yet)! Please try another search.\n")
+                searchBook(userID, cart)
 
     elif (selection == '4'):
         genreSearch = input("Please enter Genre: ")
-        SQL = "select isbn, name, author_firstname, author_lastname, genre, num_pages, rating, price, stock, format from book where genre = '{genre}' group by isbn, genre;".format(genre=genreSearch)
+     
+        SQL = "SELECT genre FROM book"
         cur.execute(SQL)
-        df_search = pd.DataFrame(cur.fetchall())
-        df_search.columns=[ x.name for x in cur.description ]
-        print(df_search)
+        df_genre = pd.DataFrame(cur.fetchall())
+        df_genre.columns=["genre"]
+
+        if(df_genre.isin([genreSearch]).any().any()):
+                SQL = "select isbn, name, author_firstname, author_lastname, genre, num_pages, rating, price, stock, format from book where genre = '{genre}' group by isbn, genre;".format(genre=genreSearch)
+                cur.execute(SQL)
+                df_search = pd.DataFrame(cur.fetchall())
+                df_search.columns=[ x.name for x in cur.description ]
+                print("\n####################################")
+                print(df_search)
+                print("\n####################################")
+
+        else:
+            print("\n########## ERROR ##########")
+            print("Your Genre is not in our bookstore database (yet)! Please try another search.\n")
+            searchBook(userID, cart)
 
     elif (selection == '5'):
         ratingSearch = input("Please enter Rating (specific number from 1-5): ")
+        if(ratingSearch not in ["1",'2','3','4','5']):
+            print("\nERROR: Please enter a rating that is between 1-5! Returning to menu.")
+            searchBook(userID, cart)
         SQL = "select isbn, name, author_firstname, author_lastname, genre, num_pages, rating, price, stock, format from book where rating = '{rating}' group by isbn, rating;".format(rating=ratingSearch)
         cur.execute(SQL)
         df_search = pd.DataFrame(cur.fetchall())
         df_search.columns=[ x.name for x in cur.description ]
+        print("\n####################################")
         print(df_search)
+        print("\n####################################")
 
     elif (selection=='6'):
         ratingSearch = input("Please enter Rating (Number from 1-5), ex. 4, results will be all books higher than (and equal to) 4: ")
+        if(ratingSearch not in ["1",'2','3','4','5']):
+            print("\nERROR: Please enter a rating that is between 1-5! Returning to menu.")
+            searchBook(userID, cart)
         SQL = "select isbn, name, author_firstname, author_lastname, genre, num_pages, rating, price, stock, format from book where rating >= '{rating}' group by isbn, rating;".format(rating=ratingSearch)
         cur.execute(SQL)
         df_search = pd.DataFrame(cur.fetchall())
         df_search.columns=[ x.name for x in cur.description ]
+        print("\n####################################")
         print(df_search)
+        print("\n####################################")
+    
+    elif (selection=='0'):
+        bookCatalogue(userID, cart)
 
     else:
         print("ERROR: Invalid choice! Please choose an option from the menu (1-6)")
         searchBook(userID, cart)
     
     while (flag):
-            print("\nIf you would like to add a book to your cart, please enter the book number from your search result. \nIf you want to continue browsing press c. \n If you want to go back to the menu press b")
+            print("\nIf you would like to add a book to your cart, please enter the book number from your search result. \nIf you want to continue browsing press c. \nIf you want to go back to the menu press b")
+
             selection = input()
             results = df_search.shape[0]
         
@@ -754,31 +813,35 @@ def searchBook(userID, cart):
             elif(selection == 'b' or selection == 'B'):
                 flag = False
                 bookCatalogue(userID, cart)
-            elif (0 <= int(selection) <= results-1):
-                if (df_search.at[int(selection), 'stock'] > 0):
-                    flag = False
-                    # Add book to cart
-                    cart.append(df_search.at[int(selection), 'isbn'])
-                    print("Book added to cart!", selection)
-                    bookCatalogue(userID, cart)
+            elif (selection.isnumeric()):
+                if(0 <= int(selection) <= results-1):
+                    if (df_search.at[int(selection), 'stock'] > 0):
+                        flag = False
+                        # Add book to cart
+                        cart.append(df_search.at[int(selection), 'isbn'])
+                        print("Book added to cart!", selection)
+                        bookCatalogue(userID, cart)
+                    else:
+                        print("Sorry! We are out of that book. Please choose another one")
+                        searchBook(userID, cart)
                 else:
-                    print("Sorry! We are out of that book. Please choose another one")
-                    searchBook(userID, cart)
+                    print("ERROR: Please enter a valid choice!!")
+                    flag = True
             else:
                 print("ERROR: Please enter a valid choice!!")
+                flag = True
 
 def main():
     cart = []
 
     landing_page()
-    selection = input("Select an option:")
-    print('selection is', selection)
+    selection = input("Select an option: ")
     if(selection=='1'):
         loggedUser = user_login()
 
         # If there was an error with the login, they go here
         while(loggedUser == 0):
-            print("Error with either username or password.")
+            print("\nError with either username or password.")
             selection = input("Please press [1] to try again or press [0] to return to the main menu: ")
             if selection=='1':
                 loggedUser = user_login()
@@ -804,6 +867,7 @@ def main():
         owner_screen()
     else:
         print("ERROR: Invalid choice! Please choose an option from the menu (1-3)")
+        main()
 
     
 
