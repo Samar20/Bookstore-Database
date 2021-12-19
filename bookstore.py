@@ -12,8 +12,8 @@ import sys
 
 # Enter DB login info after inserting DDL
 
-# conn = psycopg2.connect(host="localhost", port = 8080, database="bookstore", user="postgres", password=90210)
-conn = psycopg2.connect("dbname=bookstore user=postgres password=abcd123")
+conn = psycopg2.connect(host="localhost", port = 8080, database="bookstore", user="postgres", password=90210)
+#conn = psycopg2.connect("dbname=bookstore user=postgres password=abcd123")
 
 cur = conn.cursor()
 pd.set_option("display.max_rows", None, "display.max_columns", None)
@@ -29,9 +29,7 @@ def viewInventory():
     print("\nView Inventory Page  \n")
 
     # Add login creds here
-    # conn = psycopg2.connect(host="localhost", port = 8080, database="bookstore", user="postgres", password=90210)
-    # conn = psycopg2.connect("dbname=bookstore user=postgres password=abcd123")
-    # cur = conn.cursor()
+
 
     print("[1] Number of different types of books \n")
     print("[2] Total stock in warehouse \n")
@@ -88,10 +86,6 @@ def addNewBooks():
     ## add new books page
     print("\n#####################################\n")
     print("\n Adding a New Book Page  \n")
-
-    # conn = psycopg2.connect(host="localhost", port = 8080, database="bookstore", user="postgres", password=90210)
-    # conn = psycopg2.connect("dbname=bookstore user=postgres password=abcd123")
-    # cur = conn.cursor()
 
     isbn = input("Please enter the ISBN of the book: ")
     name = input("Please enter the Title of the book: ")
@@ -187,7 +181,7 @@ def viewReports():
     print("[3] View Sales per Genre Report \n")
     print("[4] View Sales per Publisher \n")
     print("[0] Go back to landing page \n")
-    print("(Bare in mind list needs to be updated manually)\n") #wanted to refresh materlialized view under the hood but it took too long to do so - Samar
+    print("(Bare in mind list needs to be updated manually)\n") #wanted to refresh materlialized view under the hood but it takes a long time to load delaying the program - Samar
 
 
     #Error handling for wrong input
@@ -265,7 +259,7 @@ def viewReports():
 
 
 def viewOrders():
-
+    ## view orders page
     print("\n#####################################\n")
 
     print("\n View Orders Page  \n")
@@ -284,20 +278,33 @@ def viewOrders():
         if(orderID == '0'):
             owner_screen()
             flag = False
-        
-        if(query.isin([int(orderID)]).any().any()):
 
-            status = input("Enter the updated shipping status (Pending, Delayed, Shipped): ")
 
-            SQL = "UPDATE orders SET status_order = '{stat}' WHERE order_id = {id};".format(stat=status, id=orderID)
-            cur.execute(SQL)
-            conn.commit()
+        try:
+            if(query.isin([int(orderID)]).any().any()):
+
+                status = input("Enter the updated shipping status (Pending, Delayed, Shipped): ")
+
+                SQL = "UPDATE orders SET status_order = '{stat}' WHERE order_id = {id};".format(stat=status, id=orderID)
+                cur.execute(SQL)
+                conn.commit()
+                    
+            else:
+                raise Exception
                 
-        else:
-            print("\nERROR: Please enter a valid orderID!!")
+
+        except:
+            print("\nERROR: Please enter a valid orderID!!\n")
+            selection = input("Select 0 to try again and 1 to go back to Owner's dashboard:  ")
+
+            if(selection == "0"):
+                viewOrders()
+            else:
+                owner_screen()
+
             
 def sendMoney():
-
+    ## Send Publishers profits page
     print("\n#####################################\n")
 
     print("\n Send Money to Publishers Page  \n")
@@ -385,6 +392,7 @@ def owner_screen():
 
     if(selection == "0"):
         print("\n Thank you LookInnaAdmin, Hope you had a nice visit \n")
+        exit(-1)
 
     elif(selection == "1"):
         viewInventory()
@@ -467,7 +475,7 @@ def create_account():
 
     name = input("Name: ")
     user_email = input("Email: ")
-    user_phonenumber = input("Phone Number (ex. 111-111-1111: ")
+    user_phonenumber = input("Phone Number (ex. 111-111-1111): ")
     user_password = input("Password: ")
     street_number = input("Street Number: ")
     street_name = input("Street Name: ")
@@ -494,7 +502,7 @@ def create_account():
             return userID
 
     except:
-        print("Oh no! That email already has an account, maybe reset your password (when that functionality is allowed) or use another email :/ \n")
+        print("Oh no! That email already has an account, maybe reset your password (when that functionality is allowed) or use another email :/ \nOR the error could be with your inputs, please enter CORRECT values \n")
         selection = input("Please enter 0 to try again or any other key to go back!: ")
 
         if(selection == "0"):
@@ -825,12 +833,6 @@ def searchBook(userID, cart):
                 print("ERROR: Please enter a valid choice!!")
                 flag = True
 
-
-conn = psycopg2.connect(host="localhost", port = 8080, database="bookstore", user="postgres", password=90210)
-
-cur = conn.cursor()
-pd.set_option("display.max_rows", None, "display.max_columns", None)
-pd.set_option('expand_frame_repr', False)
 
 
 
