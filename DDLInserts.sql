@@ -1,7 +1,4 @@
-delete from handles;
-delete from publishes;
 delete from owners;
-delete from buys;
 delete from inOrder;
 delete from orders;
 delete from book;
@@ -115,91 +112,8 @@ insert into inOrder values('107046','989-28-79-30536-9');
 
 
 
-insert into buys values('107021','10000');
-insert into buys values('107022','10001');
-insert into buys values('107023','10002');
-insert into buys values('107024','10003');
-insert into buys values('107025','10004');
-insert into buys values('107026','10005');
-insert into buys values('107027','10000');
-insert into buys values('107028','10001');
-insert into buys values('107029','10002');
-insert into buys values('107030','10003');
-
-insert into buys values('107031','10004');
-insert into buys values('107032','10005');
-insert into buys values('107033','10000');
-insert into buys values('107034','10001');
-insert into buys values('107035','10002');
-insert into buys values('107036','10003');
-insert into buys values('107037','10004');
-insert into buys values('107038','10005');
-insert into buys values('107039','10000');
-insert into buys values('107040','10001');
-
-insert into buys values('107041','10002');
-insert into buys values('107042','10003');
-insert into buys values('107043','10004');
-insert into buys values('107044','10005');
-insert into buys values('107045','10002');
-insert into buys values('107046','10004');
-
-insert into publishes values ('989-28-3705-987-7', 'CHP');
-insert into publishes values ('989-28-3705-592-3', 'CHP');
-insert into publishes values ('989-28-3705-583-1', 'CHP');
-insert into publishes values ('989-28-3705-966-2', 'CHP');
-insert into publishes values ('989-28-79-27078-0', 'ESP');
-insert into publishes values ('989-28-79-30536-9', 'ESP');
-insert into publishes values ('989-28-79-52883-6', 'ESP');
-insert into publishes values ('989-28-654-2017-5', 'PP');
-insert into publishes values ('989-28-654-7965-4', 'PP');
-insert into publishes values ('989-28-654-3899-6', 'PP');
-insert into publishes values ('989-28-79-82749-6', 'ESP');
-insert into publishes values ('989-28-79-82125-8', 'ESP');
-insert into publishes values ('989-28-79-22562-9', 'ESP');
-insert into publishes values ('989-28-654-2620-7', 'PP');
-insert into publishes values ('989-28-654-6507-7', 'PP');
-insert into publishes values ('989-28-654-8573-0', 'PP');
-insert into publishes values ('989-28-229-0197-6', 'SSC');
-insert into publishes values ('989-28-229-1404-4', 'SSC');
-insert into publishes values ('989-28-229-6632-6', 'SSC');
-insert into publishes values ('989-28-79-69359-6', 'ESP');
-insert into publishes values ('989-28-79-44730-', 'ESP');
-insert into publishes values ('989-28-79-40897-8', 'ESP');
-insert into publishes values ('989-28-3705-633-3', 'CHP');
-insert into publishes values ('989-28-79-14379-4', 'ESP');
-insert into publishes values ('989-28-79-03683-6', 'ESP');
-
-
 insert into owners values ('00000', 'LookInnaAdmin', 'admin@lookinna.com', '123-456-7890', 'password', '222', 'Bookstore Street', 'Ottawa', 'ON', 'K3T0V8', 'Canada', 50000.00);
 
-
-insert into handles values ('107021','00000');
-insert into handles values ('107022','00000');
-insert into handles values ('107023','00000');
-insert into handles values ('107024','00000');
-insert into handles values ('107025','00000');
-insert into handles values ('107026','00000');
-insert into handles values ('107027','00000');
-insert into handles values ('107028','00000');
-insert into handles values ('107029','00000');
-insert into handles values ('107030','00000');
-insert into handles values ('107031','00000');
-insert into handles values ('107032','00000');
-insert into handles values ('107033','00000');
-insert into handles values ('107034','00000');
-insert into handles values ('107035','00000');
-insert into handles values ('107036','00000');
-insert into handles values ('107037','00000');
-insert into handles values ('107038','00000');
-insert into handles values ('107039','00000');
-insert into handles values ('107040','00000');
-insert into handles values ('107041','00000');
-insert into handles values ('107042','00000');
-insert into handles values ('107043','00000');
-insert into handles values ('107044','00000');
-insert into handles values ('107045','00000');
-insert into handles values ('107046','00000');
 
 
 insert into addresses values ('107021',DEFAULT,'123','Sesame St','Ottawa','Ontario','K1T5F3','Canada');
