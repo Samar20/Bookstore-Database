@@ -82,18 +82,6 @@ create table inOrder
 
     );
 
-create table buys
-    (
-        order_id       integer not null,
-        user_ID        integer not null,
-        primary key (order_ID),
-        foreign key (order_id) references orders
-            on delete cascade,
-        foreign key (user_ID) references users
-            on delete cascade
-
-    );
-
 create table owners
     (
         owner_ID			  varchar(5), 
@@ -114,28 +102,6 @@ create table owners
 
 
 
-create table publishes
-    (
-        ISBN                    varchar(18),
-        publisher_id            varchar(5),
-
-        primary key (ISBN),
-        foreign key (ISBN) references book
-            on delete cascade,
-        foreign key (publisher_id) references publisher
-            on delete cascade
-    );
-
-create table handles
-    (
-        order_id                integer,
-        owner_ID                varchar(5),
-
-        primary key (order_id), 
-        foreign key (order_id) references orders   
-            on delete cascade,
-        foreign key (owner_ID) references owners
-    );
 
 create table addresses
     (
