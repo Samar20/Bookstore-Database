@@ -281,20 +281,23 @@ def viewOrders():
     while(flag):
         orderID = input("\nTo update the shipping status please enter the orderID or press 0 to go back to menu: ")
 
-        if(orderID == '0'):
-            owner_screen()
-            flag = False
-        
-        if(query.isin([int(orderID)]).any().any()):
+        if(orderID.isnumeric()):
+            if(orderID == '0'):
+                owner_screen()
+                flag = False
+            
+            if(query.isin([int(orderID)]).any().any()):
 
-            status = input("Enter the updated shipping status (Pending, Delayed, Shipped): ")
+                status = input("Enter the updated shipping status (Pending, Delayed, Shipped): ")
 
-            SQL = "UPDATE orders SET status_order = '{stat}' WHERE order_id = {id};".format(stat=status, id=orderID)
-            cur.execute(SQL)
-            conn.commit()
-                
+                SQL = "UPDATE orders SET status_order = '{stat}' WHERE order_id = {id};".format(stat=status, id=orderID)
+                cur.execute(SQL)
+                conn.commit()
+                    
+            else:
+                print("\nERROR: Please enter a valid orderID!!")
         else:
-            print("\nERROR: Please enter a valid orderID!!")
+                print("\nERROR: Please enter a valid orderID!!")
             
 def sendMoney():
 
