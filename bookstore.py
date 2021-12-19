@@ -512,7 +512,7 @@ def create_account():
 
 def bookCatalogue(userID, cart):
     print("\n#####################################\n")
-    print("Hello", userID, "Welcome to the bookstore!\n")
+    print("Hello and Welcome to the bookstore!\n")
     print("[1] Search for book (by Title, ISBN, Author, Genre, Rating)")
     print("[2] View Cart")
     print('[Q] to quit and log out')
