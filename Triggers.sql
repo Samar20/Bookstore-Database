@@ -1,18 +1,8 @@
+-- Uncomment to delete triggers and functions
 --DROP TRIGGER stock_reducer on inOrder;
 --DROP TRIGGER stockCheck on inOrder;
 --DROP FUNCTION stock_check_func();
 --DROP FUNCTION stock_reducer_func();
-
-
-
-
-
-/* Trigger that checks if stock of book is above threshold */
-create TRIGGER stockCheck after insert on inOrder
-FOR EACH ROW
-EXECUTE PROCEDURE stock_check_func();
-
-
 
 CREATE OR REPLACE FUNCTION stock_check_func()
   RETURNS trigger AS 
@@ -30,6 +20,18 @@ END;
 $$
 
 LANGUAGE 'plpgsql';
+
+
+
+
+/* Trigger that checks if stock of book is above threshold */
+create TRIGGER stockCheck after insert on inOrder
+FOR EACH ROW
+EXECUTE PROCEDURE stock_check_func();
+
+
+
+
 
 
 
