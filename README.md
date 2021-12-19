@@ -17,9 +17,5 @@ conn = psycopg2.connect(host="localhost", port = 8080, database="bookstore", use
 
 
 
-```bash
-conda env create -f environment.yml
-conda activate myenv
-```
 
 
