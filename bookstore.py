@@ -285,6 +285,7 @@ def viewOrders():
             if(orderID == '0'):
                 owner_screen()
                 flag = False
+                break
             
             if(query.isin([int(orderID)]).any().any()):
 
@@ -293,11 +294,13 @@ def viewOrders():
                 SQL = "UPDATE orders SET status_order = '{stat}' WHERE order_id = {id};".format(stat=status, id=orderID)
                 cur.execute(SQL)
                 conn.commit()
+                continue
                     
             else:
                 print("\nERROR: Please enter a valid orderID!!")
-        else:
-                print("\nERROR: Please enter a valid orderID!!")
+
+        if(not orderID.isnumeric()):
+                print("\nERROR: Please enter a valid orderID ee!!")
             
 def sendMoney():
 
