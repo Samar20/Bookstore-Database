@@ -825,15 +825,6 @@ def searchBook(userID, cart):
                 print("ERROR: Please enter a valid choice!!")
                 flag = True
 
-
-conn = psycopg2.connect(host="localhost", port = 8080, database="bookstore", user="postgres", password=90210)
-
-cur = conn.cursor()
-pd.set_option("display.max_rows", None, "display.max_columns", None)
-pd.set_option('expand_frame_repr', False)
-
-
-
 def main():
     cart = []
 
@@ -871,7 +862,6 @@ def main():
     else:
         print("ERROR: Invalid choice! Please choose an option from the menu (1-3)")
         main()
-
     
 
 if __name__ == "__main__":
