@@ -666,7 +666,8 @@ def searchBook(userID, cart):
         df_title = pd.DataFrame(cur.fetchall())
         df_title.columns=["title"]
 
-        if(df_title.isin([titleSearch]).any().any()):
+        # if(df_title.isin([titleSearch]).any().any()):
+        if(df_title['title'].str.contains(titleSearch).any()):
             SQL = "select isbn, name, author_firstname, author_lastname, genre, num_pages, rating, price, stock, format from book where name LIKE '%{name}%';".format(name=titleSearch)
             cur.execute(SQL)
             df_search = pd.DataFrame(cur.fetchall())
