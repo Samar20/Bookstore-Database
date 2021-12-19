@@ -3,7 +3,7 @@ t-- Query
 -- User - SearchByBook Title- 
 select isbn, name, author_firstname, author_lastname, genre, num_pages, rating, price, stock, format
 from book
-where name = '_'
+where name LIKE '%_%'
 
 -- User - SearchByAuthor (specific)
 select isbn, name, author_firstname, author_lastname, genre, num_pages, rating, price, stock, format
@@ -11,10 +11,10 @@ from book
 where author_firstname = '_' AND author_lastname = '_'
 group by isbn, author_firstname
 
--- User - SearchByAuthor (specific)
+-- User - SearchByAuthor (first or last)
 select isbn, name, author_firstname, author_lastname, genre, num_pages, rating, price, stock, format 
 from book
-where author_firstname = '_' or author_lastname = '_'
+where author_firstname = '%_%' or author_lastname = '%_%'
 group by isbn, author_lastname
 
 -- User - SearchByISBN
@@ -25,7 +25,7 @@ where ISBN = '_'
 -- User - SearchByGenre
 select isbn, name, author_firstname, author_lastname, genre, num_pages, rating, price, stock, format
 from book
-where genre = 'Mystery' 
+where genre = '_' 
 group by isbn, genre
 
 -- User - SearchByRating (firm)
@@ -81,5 +81,10 @@ insert into book values (ISBN, name, author_firstname, author_lastname, genre, n
 /* Owner removing books query with ISBN */
 
 DELETE FROM book WHERE ISBN = '';
+
+-- Owner updating shipping status
+UPDATE orders
+SET status_order = '_' 
+WHERE order_id = _;
 
 
