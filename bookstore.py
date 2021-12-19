@@ -275,12 +275,12 @@ def viewOrders():
     while(flag):
         orderID = input("\nTo update the shipping status please enter the orderID or press 0 to go back to menu: ")
 
-        if(orderID == '0'):
-            owner_screen()
-            flag = False
-
-
-        try:
+        if(orderID.isnumeric()):
+            if(orderID == '0'):
+                owner_screen()
+                flag = False
+                break
+            
             if(query.isin([int(orderID)]).any().any()):
 
                 status = input("Enter the updated shipping status (Pending, Delayed, Shipped): ")
@@ -288,19 +288,13 @@ def viewOrders():
                 SQL = "UPDATE orders SET status_order = '{stat}' WHERE order_id = {id};".format(stat=status, id=orderID)
                 cur.execute(SQL)
                 conn.commit()
+                continue
                     
             else:
-                raise Exception
-                
+                print("\nERROR: Please enter a valid orderID!!")
 
-        except:
-            print("\nERROR: Please enter a valid orderID!!\n")
-            selection = input("Select 0 to try again and 1 to go back to Owner's dashboard:  ")
-
-            if(selection == "0"):
-                viewOrders()
-            else:
-                owner_screen()
+        if(not orderID.isnumeric()):
+                print("\nERROR: Please enter a valid orderID ee!!")
 
             
 def sendMoney():
@@ -514,7 +508,7 @@ def create_account():
 
 def bookCatalogue(userID, cart):
     print("\n#####################################\n")
-    print("Hello", userID, "Welcome to the bookstore!\n")
+    print("Hello and Welcome to the bookstore!\n")
     print("[1] Search for book (by Title, ISBN, Author, Genre, Rating)")
     print("[2] View Cart")
     print('[Q] to quit and log out')
@@ -668,7 +662,8 @@ def searchBook(userID, cart):
         df_title = pd.DataFrame(cur.fetchall())
         df_title.columns=["title"]
 
-        if(df_title.isin([titleSearch]).any().any()):
+        # if(df_title.isin([titleSearch]).any().any()):
+        if(df_title['title'].str.contains(titleSearch).any()):
             SQL = "select isbn, name, author_firstname, author_lastname, genre, num_pages, rating, price, stock, format from book where name LIKE '%{name}%';".format(name=titleSearch)
             cur.execute(SQL)
             df_search = pd.DataFrame(cur.fetchall())
@@ -834,8 +829,6 @@ def searchBook(userID, cart):
                 flag = True
 
 
-
-
 def main():
     cart = []
 
@@ -873,7 +866,6 @@ def main():
     else:
         print("ERROR: Invalid choice! Please choose an option from the menu (1-3)")
         main()
-
     
 
 if __name__ == "__main__":
