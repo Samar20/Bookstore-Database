@@ -10,17 +10,18 @@ import sys
 
 def viewInventory():
 
-    print("\n#####################################\n")
-    print("\n View Inventory Page  \n")
+    ## view inventory page
 
-    conn = psycopg2.connect(host="localhost", port = 8080, database="bookstore", user="postgres", password=90210)
-    cur = conn.cursor()
+    print("\n#####################################\n")
+    print("\nView Inventory Page  \n")
+
 
     print("[1] Number of different types of books \n")
     print("[2] Total stock in warehouse \n")
     print("[3] Number of distinct authors \n")
-    print("[0] Go back to landing page \n")
+    print("[0] Go back to Owner's dashboard \n")
 
+    ## Try catch block to error check input values
     try:
         selection = int(input("Please select an option (0-3): "))
         while selection < 0 or selection > 3 :
@@ -40,7 +41,7 @@ def viewInventory():
         cur.execute("""select count(DISTINCT genre) as genre from book""")
         query = cur.fetchone()[0]
         print(f" Number of different types of books: {query}")
-        print("\n#####################################\n")
+        
 
         viewInventory()
 
@@ -49,7 +50,7 @@ def viewInventory():
         cur.execute("""select sum(stock) as total from book""")
         query = cur.fetchone()[0]
         print(f"Total stock in warehouse: {query}")
-        print("\n#####################################\n")
+       
 
         viewInventory()
         
@@ -58,7 +59,7 @@ def viewInventory():
         cur.execute("""select count(DISTINCT auth_name) from (SELECT CONCAT(author_firstname, ' ', author_lastname) AS auth_name FROM book) as authorCount""")
         query = cur.fetchone()[0]
         print(f"Number of distinct authors: {query}")
-        print("\n#####################################\n")
+        
 
         viewInventory()
 
@@ -68,11 +69,11 @@ def viewInventory():
 
 
 def addNewBooks():
+
+    ## add new books page
     print("\n#####################################\n")
     print("\n Adding a New Book Page  \n")
 
-    conn = psycopg2.connect(host="localhost", port = 8080, database="bookstore", user="postgres", password=90210)
-    cur = conn.cursor()
 
     isbn = input("Please enter the ISBN of the book: ")
     name = input("Please enter the Title of the book: ")
@@ -90,21 +91,23 @@ def addNewBooks():
 
     if(publisherId in query['publisher_id'].values):
 
+        ## error checks if publisher is in publisher table since it is a foreign key of book
         pubPercent = input("Please enter the percentage of profit the publisher will recieve (in decimel form): ")
         format = input("Please enter the Format of the book: ")
 
+        ## try catch block to error check if book was correctly inserted IF NOT the error is with one of the input values
         try:
             cur.execute(f"""insert into book values ('{isbn}', '{name}', '{firstname}', '{lastname}', '{genre}', '{numPages}', '{rating}', '{price}', '{stock}', '{publisherId}', '{pubPercent}', '{format}')""")
 
             conn.commit()
 
-            print("\n Successfully added the book to catalogue! \n Returning back to landing page \n")
+            print("\n Successfully added the book to catalogue! \n Returning back to Owner's dashboard \n")
             owner_screen()
 
-        ## Checking if book is inserted properly    
+        ## Since there is an erro ask user to properly check input values    
         except:
-            print("Failed to add new book \n")
-            selection = input("Select 0 to try again and 1 to go back to landing page:  ")
+            print("Failed to add new book, please check your input values \n")
+            selection = input("Select 0 to try again and 1 to go back to Owner's dashboard:  ")
 
             if(selection == "0"):
                 removeBooks()
@@ -113,8 +116,9 @@ def addNewBooks():
 
 
 
+    #If publisher id is not in publisher table tell user to add books only with known publishers
     else:
-        print("\nThis publisher is not authorised to sell \nCannot add book, returning back to landing page!\n")
+        print("\nThis publisher is not authorised to sell \nCannot add book, returning back to Owner's dashboard!\n")
         owner_screen()
 
     
@@ -122,8 +126,7 @@ def addNewBooks():
 
     
 
-    cur.close()
-    conn.close()
+
 
 
 
@@ -131,13 +134,12 @@ def addNewBooks():
 
 
 def removeBooks():
+    ## remove books page
     print("\n#####################################\n")
     print("\n ** Removing a Book Page **  \n")
 
-    conn = psycopg2.connect(host="localhost", port = 8080, database="bookstore", user="postgres", password=90210)
-    cur = conn.cursor()
 
-    isbn = input("\n Please enter the ISBN of the book to be cleared from the warehouse or 0 to exit to landing page: ")
+    isbn = input("\n Please enter the ISBN of the book to be cleared from the warehouse or 0 to exit to Owner's dashboard: ")
 
     if(isbn == "0"):
         return owner_screen()
@@ -146,26 +148,28 @@ def removeBooks():
     query = pd.read_sql('SELECT ISBN FROM book', conn)
 
 
+    #if book exists
     if(isbn in query['isbn'].values):
+        #error check if we removed the book from the table properly
         try:
             cur.execute(f"""DELETE FROM book WHERE ISBN ='{isbn}'""")
             conn.commit()
 
-            print("\n Successfully removed the book from warehouse! \n Returning back to landing page \n")
+            print("\n Successfully removed the book from warehouse! \n Returning back to Owner's dashboard \n")
             owner_screen()
 
-        ## Checking if book is deleted properly    
+        ## IF failed to remove book let user know  
         except:
             print("\n Failed to delete book \n")
 
-            selection = input("\n Select 0 to try again and 1 to go back to landing page:  ")
+            selection = input("\n Select 0 to try again and 1 to go back to Owner's dashboard:  ")
 
             if(selection == 0):
                 removeBooks()
             else:
                 owner_screen()
         
-    
+    #if book does not exist let user know 
     else:
         print("\n This book does not exist in current inventory \n Please try again!\n")
         removeBooks()
@@ -173,8 +177,6 @@ def removeBooks():
         
                 
 
-    cur.close()
-    conn.close()
 
         
 
@@ -184,9 +186,8 @@ def removeBooks():
 
 
 def viewReports():
+    ## view reports page
     print("\n#####################################\n")
-    conn = psycopg2.connect(host="localhost", port = 8080, database="bookstore", user="postgres", password=90210)
-    cur = conn.cursor()
 
     print("\n View Reports Page  \n")
 
@@ -195,6 +196,7 @@ def viewReports():
     print("[3] View Sales per Genre Report \n")
     print("[4] View Sales per Publisher \n")
     print("[0] Go back to landing page \n")
+    print("(Bare in mind list needs to be updated manually)\n") #wanted to refresh materlialized view under the hood but it took too long to do so - Samar
 
 
     #Error handling for wrong input
@@ -205,12 +207,12 @@ def viewReports():
             selection = int(input("Please select an option (0-4): "))
 
         if(selection != 0 ):
-            date = input("Please enter the time period of the report you wish to view (past month: 1, past two months: 2, past year: 12): ")
+            date = int(input("Please enter the time period (in months) of the report you wish to view (past month: 1, past two months: 2, past year: 12): "))
             #Error checking for correct month value
-            if(int(date) < 0):
+            if(date < 0):
                 raise Exception
-            if(date == "12"):
-                date = "11"
+            if(date % 12 == 0):
+                date -= 1
 
 
         
@@ -219,13 +221,14 @@ def viewReports():
         print("\n#####################################\n")
 
         if(selection == 1):
+            
             # cur.execute("""REFRESH MATERIALIZED VIEW  salesVsExpen""")
             # conn.commit()
             query = pd.read_sql("SELECT * FROM salesVsExpen where salesVsExpen.month >  EXTRACT(month  FROM current_date - INTERVAL" + f"'{date} months')", conn)
             query = query.astype({"year": int, "month": int})
             
             print(query)
-            print("\n#####################################\n")
+
 
             viewReports()
 
@@ -237,7 +240,7 @@ def viewReports():
 
             query = query.astype({"year": int, "month": int})
             print(query)
-            print("\n#####################################\n")
+  
 
             viewReports()
         
@@ -249,7 +252,7 @@ def viewReports():
 
             query = query.astype({"year": int, "month": int})
             print(query)
-            print("\n#####################################\n")
+ 
 
             viewReports()
         
@@ -261,7 +264,7 @@ def viewReports():
 
             query = query.astype({"year": int, "month": int})
             print(query)
-            print("\n#####################################\n")
+         
 
             viewReports()
 
@@ -272,10 +275,7 @@ def viewReports():
         
 
 
-        cur.close()
-        conn.close()
-
-
+    #User failed to enter correct input format let user know 
     except:
         print("\nWrong input type please try again with an integer!\n")
         viewReports()
@@ -288,20 +288,19 @@ def viewReports():
 
 
 def viewOrders():
+    #View orders page
     print("\n#####################################\n")
 
     print("\n View Orders Page  \n")
-    conn = psycopg2.connect(host="localhost", port = 8080, database="bookstore", user="postgres", password=90210)
-    cur = conn.cursor()
+
 
     query = pd.read_sql('SELECT * FROM orders', conn)
     print(query)
 
-    print("\n Returning back to landing page!\n")
+    print("\nReturning back to Owner's dashboard!\n")
     owner_screen()
 
-    cur.close()
-    conn.close()
+
 
 
 def sendMoney():
@@ -310,8 +309,6 @@ def sendMoney():
 
     print("\n Send Money to Publishers Page  \n")
 
-    conn = psycopg2.connect(host="localhost", port = 8080, database="bookstore", user="postgres", password=90210)
-    cur = conn.cursor()
 
     print("Current Publisher list")
     print("\n#####################################\n")
@@ -320,15 +317,15 @@ def sendMoney():
     print(pubList)
     print("\n#####################################\n")
 
-    selection = input("Using the index on left hand side, please enter the index of the publisher you wish to send money to: ")
+    selection = input("Using the index on left hand side, please enter the index of the publisher you wish to send money to (Bare in mind list needs to be updated manually): ")
+    #Error check for input values
     while selection not in ('0', '1', '2', '3') :
         print("\nWrong input please try again!\n")
         selection = input("Using the index on left hand side, please enter the index of the publisher you wish to send money to: ")
 
     print("\n#####################################\n")
 
-    # cur.execute("""REFRESH MATERIALIZED VIEW  salesPerPublisher""")
-    # conn.commit()
+
 
 
     query = pd.read_sql("SELECT year, month, publisher_id, salesPerPublisher.publisher_name, total_profits FROM salesPerPublisher join Publisher on publisher.publisher_name = salesPerPublisher.publisher_name where salesPerPublisher.publisher_name = " + f"'{pubList.iloc[int(selection)]['publisher_name']}' ", conn)
@@ -336,13 +333,13 @@ def sendMoney():
     print("\n#####################################\n")
 
     
-
+    #Error checking try block to make sure the year and month input values are correct (int)
     try:
 
         year, month = input("Which year and month's profits do you wish to send? (year,month) ").split(',')
 
+        ##### THIS BLOCK OF CODE FOR THE LOADING SCREEN IS FROM STOCK OVERFLOW I HAVE CITED IT IN THE REPORT #####
         print("Loading:")
-
         #animation = ["10%", "20%", "30%", "40%", "50%", "60%", "70%", "80%", "90%", "100%"]
         animation = ["[■□□□□□□□□□]","[■■□□□□□□□□]", "[■■■□□□□□□□]", "[■■■■□□□□□□]", "[■■■■■□□□□□]", "[■■■■■■□□□□]", "[■■■■■■■□□□]", "[■■■■■■■■□□]", "[■■■■■■■■■□]", "[■■■■■■■■■■]"]
 
@@ -353,14 +350,17 @@ def sendMoney():
 
         print("\n")
 
+        ##########################################################################################################
+
         transfer = pd.read_sql("SELECT year, month, publisher_id, salesPerPublisher.publisher_name, total_profits, publisher_bankAccount FROM salesPerPublisher join Publisher on publisher.publisher_name = salesPerPublisher.publisher_name where salesPerPublisher.publisher_name = " + f"'{pubList.iloc[int(selection)]['publisher_name']}' and year = " +  f"'{year}' " + " and month = " + f"'{month}' ", conn)
 
+        #If dataframe is empty users input values are probably wrong raise exception
         if (transfer.empty):
             raise Exception
         transfer = transfer.astype({"year": int, "month": int, "publisher_bankaccount": int})
         print(transfer)
-        print(f"\n Sent ${round(transfer.iloc[0]['total_profits'], 2)} to  {pubList.iloc[int(selection)]['publisher_name']}'s bank account no: {transfer.iloc[0]['publisher_bankaccount']}")
-        print("\n Returning back to landing page!")
+        print(f"\n SUCCESSFUL TRANSFER\n Sent ${round(transfer.iloc[0]['total_profits'], 2)} to  {pubList.iloc[int(selection)]['publisher_name']}'s bank account no: {transfer.iloc[0]['publisher_bankaccount']}")
+        print("\n Returning back to Owner's dashboard!")
         print("\n#####################################\n")
 
         return owner_screen()
@@ -370,7 +370,7 @@ def sendMoney():
     except:
         print("\n Failed to enter correct values \n")
 
-        selection = input("\n Select 0 to try again from the beginning and 1 to go back to landing page: ")
+        selection = input("\n Select 0 to try again from the beginning and 1 to go back to Owner's dashboard: ")
 
         if(selection == '0'):
             sendMoney()
@@ -390,10 +390,10 @@ def sendMoney():
 
 
 def owner_screen():
+
+    # Owner dashboard page
     print("\n#####################################\n")
 
-    cur.close()
-    conn.close()
 
     print("Welcome to the Owners dashboard, LookInnaAdmin! \n")
     print("[1] View Current Inventory \n")
@@ -414,6 +414,7 @@ def owner_screen():
 
     if(selection == "0"):
         print("\n Thank you LookInnaAdmin, Hope you had a nice visit \n")
+
             
             
 
@@ -443,12 +444,7 @@ def owner_screen():
         owner_screen()
         
 
-# conn = psycopg2.connect("dbname=bookstore user=postgres password=abcd123")
-conn = psycopg2.connect(host="localhost", port = 8080, database="bookstore", user="postgres", password=90210)
 
-cur = conn.cursor()
-pd.set_option("display.max_rows", None, "display.max_columns", None)
-pd.set_option('expand_frame_repr', False)
 
 # cur.execute(open("DDL.sql", "r").read())
 # cur.execute(open("DDLInserts.sql", "r").read())
@@ -767,6 +763,15 @@ def searchBook(userID, cart):
             else:
                 print("ERROR: Please enter a valid choice!!")
 
+
+conn = psycopg2.connect(host="localhost", port = 8080, database="bookstore", user="postgres", password=90210)
+
+cur = conn.cursor()
+pd.set_option("display.max_rows", None, "display.max_columns", None)
+pd.set_option('expand_frame_repr', False)
+
+
+
 def main():
     cart = []
 
@@ -809,4 +814,4 @@ def main():
 
 if __name__ == "__main__":
     main()
-    # linkDatabase()
+
